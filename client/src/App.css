@@ -1,0 +1,514 @@
+/* App.css */
+/* 1. 전체 레이아웃 잡기 */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+/* 2. 제목 스타일 */
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: #B0BFAE;
+}
+
+.subtitle {
+  color: #B0BFAE;
+  margin-bottom: 50px;
+  font-size : 1.3rem;
+}
+
+/* 3. 그리드(갤러리) 레이아웃 - 핵심! */
+.grid {
+  display: grid;
+  /* 화면 크기에 따라 자동으로 열 개수 조절 (반응형) */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+/* 4. 카드 디자인 */
+.card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden; /* 이미지가 둥근 모서리를 튀어나가지 않게 */
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* 은은한 그림자 */
+  transition: transform 0.3s ease; /* 움직임 부드럽게 */
+  text-align: left;
+}
+
+/* 마우스 올렸을 때 살짝 떠오르는 효과 */
+.card:hover {
+  transform: translateY(-10px);
+}
+
+.card-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover; /* 이미지가 찌그러지지 않고 꽉 차게 */
+  background-color: #eee;
+}
+
+.card-content {
+  padding: 20px;
+}
+
+.card h3 {
+  margin: 0 0 10px 0;
+  color: #222;
+}
+
+.card p {
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+.tech-stack {
+  display: inline-block;
+  background-color: #f0f4f8;
+  color: #007bff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px; /* 아이콘과 글자 사이 간격 */
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+/* 깃허브 버튼 (검은색) */
+.link-btn.github {
+  background-color: #24292e;
+  color: white;
+}
+.link-btn.github:hover {
+  background-color: #000;
+}
+
+/* 데모 버튼 (파란색) */
+.link-btn.demo {
+  background-color: #007bff;
+  color: white;
+}
+.link-btn.demo:hover {
+  background-color: #0056b3;
+}
+
+/* 탭 버튼 영역 */
+.admin-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+/* 기본 버튼 스타일 */
+.tab-btn {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 30px;
+  background-color: #eee;
+  color: #555;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+/* 선택된 탭 (Active) 스타일 */
+.tab-btn.active {
+  background-color: #333;
+  color: white;
+  transform: scale(1.05); /* 살짝 커짐 */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.tech-icons {
+  display : flex;
+  justify-content : center;
+}
+
+.tech-icons>span {
+  margin : 20px 20px;
+}
+
+/*------------------------------------------------------------------*/
+/* =========================================
+   1. CSS 변수 (테마 색상 관리)
+   - 나중에 다크모드 할 때 이 변수 값만 바꾸면 끝남!
+   ========================================= */
+:root {
+  --primary-color: #007bff;       /* 메인 파란색 */
+  --primary-hover: #0056b3;
+  --danger-color: #ff4444;        /* 삭제/경고 빨간색 */
+  --danger-hover: #cc0000;
+  --dark-color: #333333;          /* 진한 회색 (본문) */
+  --light-gray: #f8f9fa;          /* 배경용 연한 회색 */
+  --border-color: #dddddd;        /* 테두리 색 */
+  --shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+}
+
+/* =========================================
+   2. 레이아웃 유틸리티 (Layout)
+   ========================================= */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  width: 100%;
+}
+
+.section-spacer {
+  margin-top: 80px;
+  margin-bottom: 80px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.flex-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 구분선 */
+.divider {
+  border: 0;
+  border-top: 1px solid var(--border-color);
+  margin: 60px 0;
+}
+
+/* =========================================
+   3. 타이포그래피 (Typography)
+   ========================================= */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+
+.main-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--dark-color);
+  margin-bottom: 10px;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--dark-color);
+  margin-bottom: 30px;
+  
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 40px;
+}
+
+.highlight { color: var(--primary-color); }
+
+/* =========================================
+   4. 카드 디자인 (Card)
+   ========================================= */
+.card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-color: var(--primary-color); /* 호버 시 테두리 포인트 */
+}
+
+.card-content { padding: 20px; }
+.card-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  background-color: #eee;
+}
+
+/* 기술 스택 뱃지 */
+.tech-badge {
+  display: inline-block;
+  background-color: #eef4fc;
+  color: var(--primary-color);
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+/* =========================================
+   5. 버튼 디자인 (Buttons) - 어디서든 쓰세요!
+   ========================================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  text-decoration: none; /* a태그일 경우 밑줄 제거 */
+}
+
+/* 기본 버튼 (검정) */
+.btn-dark {
+  background-color: var(--dark-color);
+  color: white;
+}
+.btn-dark:hover { background-color: black; }
+
+/* 주요 버튼 (파랑) */
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+.btn-primary:hover { background-color: var(--primary-hover); }
+
+/* 위험 버튼 (빨강) */
+.btn-danger {
+  background-color: var(--danger-color);
+  color: white;
+}
+.btn-danger:hover { background-color: var(--danger-hover); }
+
+/* 아웃라인 버튼 (배경 투명) */
+.btn-outline {
+  background-color: transparent;
+  border: 2px solid var(--border-color);
+  color: var(--dark-color);
+}
+.btn-outline:hover {
+  border-color: var(--dark-color);
+  background-color: #f0f0f0;
+}
+
+/* 작고 귀여운 삭제 버튼 (카드 내부용) */
+.btn-icon-delete {
+  background: none;
+  border: none;
+  color: var(--danger-color);
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 5px;
+  transition: transform 0.2s;
+}
+.btn-icon-delete:hover { transform: scale(1.2); }
+
+/* =========================================
+   6. 입력 폼 디자인 (Inputs)
+   ========================================= */
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-field, .textarea-field {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+  font-family: inherit;
+}
+
+.input-field:focus, .textarea-field:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.textarea-field {
+  resize: vertical; /* 세로로만 늘어나게 */
+  min-height: 100px;
+}
+
+
+/* =========================================
+   7. 네비게이션 바 (Navbar)
+   ========================================= */
+.navbar {
+  position: fixed; /* 화면 상단에 딱 고정! */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px; /* 높이 고정 (나중에 스크롤 계산할 때 중요) */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 50px;
+  z-index: 1000; /* 다른 요소들보다 무조건 위에 뜨게 */
+  
+  /* 유리 같은 반투명 효과 (Glassmorphism) */
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--dark-color);
+  cursor: pointer;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 30px;
+}
+
+/* 메뉴 링크 스타일 */
+.nav-link {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: color 0.2s;
+  position: relative;
+}
+
+.nav-link:hover {
+  color: var(--primary-color);
+}
+
+/* 현재 보고 있는 섹션일 때 (Active) - react-scroll이 자동으로 붙여줌! */
+.nav-link.active {
+  color: var(--primary-color);
+}
+
+/* 활성화됐을 때 밑줄 긋기 애니메이션 */
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--primary-color);
+}
+
+/* =========================================
+   8. 관리자 페이지 레이아웃 (Admin Layout)
+   ========================================= */
+.admin-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f4f6f9;
+}
+
+/* 사이드바 스타일 */
+.sidebar {
+  width: 260px;
+  background-color: #2c3e50; /* 진한 남색 */
+  color: white;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  position: fixed; /* 왼쪽 고정 */
+  height: 100%;
+}
+
+.sidebar-logo {
+  font-size: 1.5rem;
+  margin-bottom: 50px;
+  text-align: center;
+  color: #fff;
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%; /* 로그아웃 버튼을 아래로 밀기 위해 */
+}
+
+.sidebar-menu li {
+  padding: 15px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.sidebar-menu li:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-menu li.active {
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+
+/* 콘텐츠 영역 스타일 */
+.admin-content {
+  flex: 1; /* 남은 공간 다 차지하기 */
+  margin-left: 260px; /* 사이드바 너비만큼 밀기 */
+  padding: 40px;
+}
+
+.page-title {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.content-box {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: var(--shadow);
+}
+
+.form-wrapper {
+  max-width: 600px;
+  margin: 0 auto 50px auto; /* 아래 여백 포함 */
+}
+
+/* [NEW] 리스트(댓글 등)를 중앙에 배치하는 래퍼 */
+.list-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* [NEW] 텍스트 하이라이트 (색상 변수 사용!) */
+.text-highlight {
+  color: var(--primary-color);
+  font-weight: bold;
+}

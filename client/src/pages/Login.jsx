@@ -21,8 +21,9 @@ function Login(){
         })
         .then(res => res.json())
         .then(data => {
-            if(data.token){
-                localStorage.setItem('token', data.token);
+            if(data.accessToken){
+                localStorage.setItem('token', data.accessToken);
+                localStorage.setItem('refreshToken', data.refreshToken);
 
                 alert('로그인 되었습니다. 관리자 페이지로 이동합니다');
                 navigate('/admin');

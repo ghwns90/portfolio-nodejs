@@ -1,12 +1,24 @@
-import { Routes, Route, Link } from 'react-router-dom';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Admin from './pages/Admin';
 import Login from './pages/Login';
 import RequireAuth from './components/RequireAuth';
+import { useAuthCheck } from './hooks/useAuthCheck';
 import './App.css'
 
 function App() {
 
+  const { isLoggedIn, isLoading } = useAuthCheck();
+
+  if(isLoading){
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
+        <h3>Loading... ⏳</h3>
+      </div>
+    );
+  }
+  
   return (
     <div> 
       {/* 화면이 바뀌는 영역 (무대) */}

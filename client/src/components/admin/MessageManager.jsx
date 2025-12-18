@@ -58,7 +58,7 @@ function MessageManager(){
         <div>
             <h3> Contact ({messages.length}) </h3>
             <div className="list-wraperr">
-                {messages.map( msg => (
+                {messages.map((msg) => (
                     <div key={msg.id} className="card" style={{marginBottom: '15px', padding: '20px', borderLeft: msg.is_replied ? '5px solid green' : '5px solid orange'}}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
                             <div>

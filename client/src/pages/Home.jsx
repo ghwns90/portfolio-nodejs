@@ -9,9 +9,7 @@ import Contact from '../components/Contact';
 function Home() {
 
   return (
-    <div>
-
-      <Navbar />
+    <>
       <div className="container"> 
         {/* 소개 섹션 */}     
         <About/>
@@ -25,7 +23,7 @@ function Home() {
         {/* Contact 섹션 */}
         <Contact />
       </div>
-    </div>
+    </>
     
   );
 }

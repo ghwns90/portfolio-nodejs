@@ -112,11 +112,11 @@ function Guestbook(){
     };
 
     return (
-        <div id="guestbook" className="gestbook-section section-spacer">
-            <h2 className="section-title text-left">💬 Guestbook</h2>
+        <section id="guestbook" className="section-spacer">
+            <h2 className="section-title text-center">💬 Guestbook</h2>
 
             <div className="form-wrapper">
-                <form onSubmit={handleSubmit} className="card card-content">
+                <form onSubmit={handleSubmit} className="card">
                     <div className="grid" style={{ gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '15px' }}>
                         <input 
                             type="text" name="username" placeholder="닉네임" 
@@ -124,7 +124,7 @@ function Guestbook(){
                             value={formData.username} onChange={handleChange}
                         />
                         <input 
-                            type="password" name="password" placeholder="비밀번호 (삭제용)" 
+                            type="password" name="password" placeholder="비밀번호" 
                             className="input-field"
                             value={formData.password} onChange={handleChange} 
                         />
@@ -135,66 +135,47 @@ function Guestbook(){
                         value={formData.content} onChange={handleChange}
                         style={{ marginBottom:'15px'}} 
                     />
-                    <button type="submit" className="btn btn-dark" style={{ width: '100%' }}>남기기</button>
+                    <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>남기기</button>
                 </form>
             </div>
 
             <div className="list-wrapper">
                 {comments.map((comment) => (
-                    <div key={comment.id} className="card card-content" style={{ marginBottom: '15px', position: 'relative' }}>
+                    <div key={comment.id} className="card" style={{ marginBottom: '15px', position: 'relative' }}>
                         <div className="flex-row" style={{ justifyContent: 'space-between', marginBottom: '10px' }}>
-                            <strong className="text-highlight">{comment.username}</strong>
-                            <small style={{ color: '#999' }}>{new Date(comment.created_at).toLocaleDateString()}</small>
+                            <div style={{ display:'flex', alignItems:'center', gap:'10px'}}>
+                                {/* 랜덤 아바타 느낌의 원 */}
+                                <div style={{width:'30px', height:'30px', borderRadius:'50%', background:'linear-gradient(45deg, #a855f7, #ec4899)'}}></div>
+                                <strong style={{color:'#fff', fontSize:'1.1rem'}}>{comment.username}</strong>
+                            </div>        
+                            <small style={{ color: 'var(--text-muted)' }}>{new Date(comment.created_at).toLocaleDateString()}</small>
                         </div>
-                        <p style={{ margin: 0, lineHeight: 1.6 }}>{comment.content}</p>
+
+                        <p style={{ margin: '10px 0', lineHeight: 1.6, color: '#ddd' }}>{comment.content}</p>
+
                         {/* 답글 리스트 */}
                         {comment.replies && comment.replies.length > 0 && (
-                            <div style={{marginTop: '15px', paddingLeft: '20px', borderLeft:'3px solid #eee'}}>
+                            <div className="reply-box">
                                 {comment.replies.map((reply) => (
-                                    <div key={reply.id} style={{
-                                        backgroundColor: '#f8f9fa',
-                                        padding: '10px',
-                                        borderRadius: '8px',
-                                        marginBottom: '5px',
-                                        fontSize: '0.95rem'
-                                    }}>
-                                        <strong
-                                            style={{ color: 'var(--primary-color)'}}
-                                        >
-                                            {reply.username}:
-                                        </strong>
-                                        <span style={{marginLeft: '8px'}}>{reply.content}</span>
+                                    <div key={reply.id} style={{ marginBottom: '8px', fontSize: '0.95rem' }}>
+                                        <strong style={{ color: '#ec4899' }}>HoJunior:</strong>
+                                        <span style={{ marginLeft: '8px', color: '#ccc' }}>{reply.content}</span>
                                     </div>
                                 ))}
                             </div>    
                         )}
 
-                        {/* 댓글 작성 form */}
+                        {/* 답글 달기 (관리자용) */}
                         {isAdmin && (
-                            <form
-                                onSubmit={(e) => handleReplySubmit(e, comment.id)}
-                                style={{ marginTop: '15px', display: 'flex', gap: '10px'}}
-                            >
-                                <input 
-                                    type="text" 
-                                    name="content"
-                                    placeholder="한마디 해주세요" 
-                                    className="input-field"
-                                    style={{flex: 1, padding: '8px'}}
-                                />
-                                <button type="submit" className="btn btn-primary" style={{padding: '8px 15px', fontSize: '0.9rem'}}>
-                                    등록
-                                </button>
+                            <form onSubmit={(e) => handleReplySubmit(e, comment.id)} style={{ marginTop: '15px', display: 'flex', gap: '10px'}}>
+                                <input type="text" name="content" placeholder="답글 작성..." className="input-field" style={{padding: '8px 12px', fontSize:'0.9rem'}} />
+                                <button type="submit" className="btn btn-outline" style={{padding: '8px 15px'}}>등록</button>
                             </form>
                         )}
-                        {/* 삭제 버튼 (쓰레기통 아이콘) */}
-                        <button 
-                            type="button"
-                            onClick={() => handleDelete(comment.id)} 
-                            className="btn-icon-delete"
-                            style={{ position: 'absolute', top: '1px', right: '1px' }}
-                        >
-                        <FaTrash />
+                        
+                        {/* 삭제 버튼 */}
+                        <button type="button" onClick={() => handleDelete(comment.id)} className="btn-icon-delete" style={{ position: 'absolute', top: '20px', right: '20px' }}>
+                            <FaTrash />
                         </button>
                     </div>
                 ))}
@@ -225,7 +206,7 @@ function Guestbook(){
                 </button>
             </div>
             )}
-        </div>
+        </section>
     );
 
 

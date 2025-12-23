@@ -46,20 +46,20 @@ function Contact() {
             <h2 className="section-title text-center">Contact Me</h2>
 
             <div className="form-wrapper">
-                <form onSubmit={handleSubmit} className="card card-content">
+                <form onSubmit={handleSubmit} className="card">
                     <div className="grid" style={{gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '15px'}}>
                         <input 
                             type="text" name="name" placeholder="이름" required
-                            className="input-filed" value={formData.name} onChange={handleChange}
+                            className="input-field" value={formData.name} onChange={handleChange}
                         />
                         <input 
                             type="email" name="email" placeholder="이메일" required
-                            className="input-filed" value={formData.email} onChange={handleChange}
+                            className="input-field" value={formData.email} onChange={handleChange}
                         />
                     </div>
                     <input 
                         type="text" name="subject" placeholder="제목" required
-                        className="input-filed" style={{ marginBottom: '15px'}} 
+                        className="input-field" style={{ marginBottom: '15px'}} 
                         value={formData.subject} onChange={handleChange}
                     />
                     <textarea

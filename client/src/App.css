@@ -1,370 +1,625 @@
 /* App.css */
 
+
 /* =========================================
-   1. CSS 변수 (테마 색상 관리)
-   - 나중에 다크모드 할 때 이 변수 값만 바꾸면 끝남!
+    ROOT VARIABLES & RESET (디자인 토큰)
    ========================================= */
 :root {
-  --primary-color: #007bff;       /* 메인 파란색 */
-  --primary-hover: #0056b3;
-  --danger-color: #ff4444;        /* 삭제/경고 빨간색 */
-  --danger-hover: #cc0000;
-  --dark-color: #333333;          /* 진한 회색 (본문) */
-  --light-gray: #f8f9fa;          /* 배경용 연한 회색 */
-  --border-color: #dddddd;        /* 테두리 색 */
-  --shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+  /* 배경색: 완전 블랙보다는 아주 깊은 네이비/그레이가 고급스러움 */
+  --bg-dark: #050505; 
+  --bg-panel: #121212;
+
+  /* 글래스모피즘 (유리 효과) 변수 */
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --glass-blur: blur(12px);
+
+  /* 포인트 컬러 (이미지의 보라색 네온) */
+  --primary-neon: #a855f7; /* 보라색 */
+  --primary-glow: rgba(168, 85, 247, 0.4);
+  --text-main: #ffffff;
+  --text-muted: #a1a1aa;
+
+  /* 레이아웃 크기 */
+  --sidebar-width: 250px;
+  --border-radius-lg: 30px; /* 이미지처럼 둥글게 */
+  --border-radius-md: 20px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden; /* 가로 스크롤 방지 */
+}
+
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+
+/* =========================================
+    LAYOUT STRUCTURE (사이드바 레이아웃)
+   ========================================= */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* 메인 컨텐츠 영역 */
+.main-content {
+  flex: 1;
+  padding: 40px;
+  margin-left: var(--sidebar-width); /* 사이드바 공간 확보 */
+  width: calc(100% - var(--sidebar-width));
+}
+
+/* 모바일 대응 (사이드바 숨기고 전체 너비) */
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+    padding: 20px;
+    padding-top: 80px; /* 상단 네비게이션 공간 확보 */
+  }
 }
 
 /* =========================================
-   2. 레이아웃 유틸리티 (Layout)
+   3. SIDEBAR COMPONENT (이미지 스타일 구현)
    ========================================= */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
+.sidebar {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: var(--sidebar-width);
+  height: calc(100vh - 40px); /* 위아래 여백 줌 */
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur); /* 사파리 지원 */
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius-lg);
   padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  /* 부드러운 그림자 */
+  box-shadow: var(--glass-shadow);
+}
+
+.logo-area {
+  margin-bottom: 40px;
+  padding-left: 15px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
+  border-radius: 100px; /* 캡슐 모양 */
+  color: var(--text-muted);
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.nav-item svg {
+  margin-right: 15px;
+  font-size: 1.2rem;
+}
+
+/* 호버 효과 */
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+}
+
+/* 활성화 된 메뉴 (이미지의 보라색 글로우 효과) */
+.nav-item.active {
+  background: linear-gradient(90deg, rgba(168, 85, 247, 0.15) 0%, rgba(0,0,0,0) 100%);
+  color: var(--text-main);
+  border-left: 1px solid rgba(168, 85, 247, 0.5); /* 미세한 테두리 */
+}
+
+/* 활성화 시 왼쪽 보라색 바 (Bar) */
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: -20px; /* 사이드바 패딩 고려 */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 20px;
+  background: var(--primary-neon);
+  border-radius: 0 4px 4px 0;
+  box-shadow: 0 0 10px var(--primary-neon);
+}
+
+/* =========================================
+    NAVBAR (모바일용 상단 바)
+   ========================================= */
+.navbar-mobile {
+  display: none; /* 데스크탑에선 숨김 */
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
+  height: 60px;
+  background: rgba(5, 5, 5, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--glass-border);
+  z-index: 999;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
 }
 
-.section-spacer {
-  margin-top: 80px;
-  margin-bottom: 80px;
+@media (max-width: 768px) {
+  .navbar-mobile {
+    display: flex;
+  }
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 30px;
+/* =========================================
+    REUSABLE COMPONENTS (재사용 UI 뭉치)
+   ========================================= */
+
+/* [Glass Card] 프로젝트, 방명록 등에 사용 */
+.card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius-md);
+  padding: 30px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  backdrop-filter: blur(5px);
 }
 
+.card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(168, 85, 247, 0.3);
+  box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
+}
+
+/* [Inputs] 폼 입력창 */
+.input-field, .textarea-field {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05); /* 더 어둡고 은은하게 */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 15px;
+  color: var(--text-main);
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.input-field:focus, .textarea-field:focus {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--primary-neon);
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+}
+
+/* [Buttons] 네온 버튼 */
+.btn {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-dark {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-dark:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--text-muted);
+}
+
+.btn-outline:hover:not(:disabled) {
+  border-color: var(--primary-neon);
+  color: var(--primary-neon);
+  background: rgba(168, 85, 247, 0.1);
+}
+
+.btn-outline:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* 삭제 버튼 (아이콘) */
+.btn-icon-delete {
+  background: transparent;
+  border: none;
+  color: #ff4d4d; /* 빨간색 */
+  cursor: pointer;
+  opacity: 0.6;
+  font-size: 1rem;
+  padding: 5px;
+  transition: all 0.2s;
+}
+
+.btn-icon-delete:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  background: rgba(255, 77, 77, 0.1);
+  border-radius: 50%;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 100px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
+  transform: scale(1.02);
+}
+
+/* [Carousel] 간단한 CSS 스크롤 스냅 캐러셀 */
+.carousel-container {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 20px;
+  padding-bottom: 20px; /* 스크롤바 공간 */
+  -ms-overflow-style: none; /* IE, Edge 스크롤바 숨김 */
+  scrollbar-width: none; /* Firefox 스크롤바 숨김 */
+}
+.carousel-container::-webkit-scrollbar {
+  display: none; /* Chrome 스크롤바 숨김 */
+}
+
+.carousel-item {
+  flex: 0 0 300px; /* 카드 너비 고정 */
+  scroll-snap-align: start;
+}
+
+/* =========================================
+    ABOUT SECTION STYLES (보내주신 코드용)
+   ========================================= */
+.about-card-layout {
+  display: flex;
+  align-items: center;
+  gap: 50px; /* 이미지와 텍스트 사이 간격 */
+  padding: 60px; /* 카드 내부 여백을 넓게 */
+  /* 유리 효과를 더 극대화하기 위해 배경색을 살짝 조절 */
+  background: rgba(255, 255, 255, 0.02); 
+}
+
+.profile-section {
+    flex: 0 0 300px; /* 이미지 영역 너비 고정 */
+}
+
+.profile-img-wrapper {
+    width: 300px;
+    height: 300px;
+    position: relative;
+}
+
+.profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* 완전 원형 대신 약간 둥근 사각형(Squircle)이 더 트렌디함 */
+    border-radius: 30%; 
+    border: 3px solid rgba(168, 85, 247, 0.3); /* 보라색 테두리 */
+    box-shadow: 0 0 30px rgba(168, 85, 247, 0.2); /* 은은한 후광 */
+}
+
+.info-section {
+    flex: 1; /* 나머지 공간 다 차지 */
+    text-align: left; /* 텍스트 왼쪽 정렬 */
+}
+
+.about-title {
+    font-size: 2rem;
+    line-height: 1.3;
+}
+
+/* Tech Stacks 부분 */
+.tech-stack-container {
+    margin-top: 30px;
+    text-align: left;
+}
+
+.skills-wrapper {
+    display: flex;
+    flex-wrap: wrap; /* 줄바꿈 허용 */
+    gap: 12px; /* 칩 사이 간격 */
+    margin-bottom: 8px;
+}
+
+/* [공통] 스킬 칩 기본 디자인 */
+.skill-chip {
+    padding: 8px 16px;
+    border-radius: 100px; /* 캡슐 모양 */
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    background: rgba(255, 255, 255, 0.03); /* 아주 연한 유리 배경 */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* 기본 테두리 */
+    color: var(--text-muted);
+    transition: all 0.3s ease;
+    cursor: default;
+    position: relative;
+    overflow: hidden; /* 빛 효과가 밖으로 안 새어나가게 */
+}
+
+/* [카테고리별 색상 테마 정의] */
+
+/* 1. Backend (안정감 있는 보라/블루 계열) */
+.skill-chip.backend {
+    color: #a855f7; /* 텍스트 색상 */
+    border-color: rgba(168, 85, 247, 0.3);
+}
+.skill-chip.backend:hover {
+    background: rgba(168, 85, 247, 0.15); /* 배경 틴트 */
+    border-color: #a855f7; /* 테두리 진하게 */
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.4); /* 네온 글로우 */
+    transform: translateY(-3px); /* 살짝 뜸 */
+    color: #fff; /* 호버시 글자는 흰색으로 */
+}
+
+/* 2. Frontend (산뜻한 민트/하늘색 계열) */
+.skill-chip.frontend {
+    color: #22d3ee; /* Cyan */
+    border-color: rgba(34, 211, 238, 0.3);
+}
+.skill-chip.frontend:hover {
+    background: rgba(34, 211, 238, 0.15);
+    border-color: #22d3ee;
+    box-shadow: 0 0 15px rgba(34, 211, 238, 0.4);
+    transform: translateY(-3px);
+    color: #fff;
+}
+
+/* 3. DevOps & Tools (눈에 띄는 핑크/오렌지 계열) */
+.skill-chip.devops {
+    color: #f472b6; /* Pink */
+    border-color: rgba(244, 114, 182, 0.3);
+}
+.skill-chip.devops:hover {
+    background: rgba(244, 114, 182, 0.15);
+    border-color: #f472b6;
+    box-shadow: 0 0 15px rgba(244, 114, 182, 0.4);
+    transform: translateY(-3px);
+    color: #fff;
+}
+
+/* [반응형] 모바일에서는 위아래로 배치 */
+@media (max-width: 992px) { /* 태블릿 이하 */
+    .about-card-layout {
+        flex-direction: column; /* 위아래로 쌓기 */
+        text-align: center;
+        padding: 30px;
+        gap: 30px;
+    }
+    
+    .profile-section {
+        flex: 0 0 auto;
+    }
+    
+    .profile-img-wrapper {
+        width: 200px;
+        height: 200px;
+        margin: 0 auto; /* 가운데 정렬 */
+    }
+
+    .info-section {
+        text-align: center;
+    }
+    
+    .skills-wrapper {
+        justify-content: center; /* 모바일에선 가운데 정렬 */
+    }
+    .tech-stack-container {
+        text-align: center;
+    }
+}
+
+/* [레이아웃 유틸] */
 .flex-row {
   display: flex;
-  gap: 10px;
   align-items: center;
 }
-
 .flex-center {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
-/* 구분선 */
-.divider {
-  border: 0;
-  border-top: 1px solid var(--border-color);
-  margin: 60px 0;
-}
-
-/* =========================================
-   3. 타이포그래피 (Typography)
-   ========================================= */
 .text-center { text-align: center; }
 .text-left { text-align: left; }
 
-.main-title {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: var(--dark-color);
-  margin-bottom: 10px;
-}
-
+/* [Guestbook & Contact 전용] */
 .section-title {
   font-size: 2rem;
-  font-weight: 700;
-  color: var(--dark-color);
   margin-bottom: 30px;
-  
+  font-weight: 700;
+  background: linear-gradient(to right, #fff, #a1a1aa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.subtitle {
-  font-size: 1.1rem;
-  color: #666;
-  margin-bottom: 40px;
-}
-
-.highlight { color: var(--primary-color); }
-
-/* =========================================
-   4. 카드 디자인 (Card)
-   ========================================= */
-.card {
-  background: white;
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: var(--shadow);
-  transition: transform 0.3s ease;
-  border: 1px solid transparent;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  border-color: var(--primary-color); /* 호버 시 테두리 포인트 */
-}
-
-.card-content { padding: 20px; }
-.card-img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  background-color: #eee;
-}
-
-/* 기술 스택 뱃지 */
-.tech-badge {
-  display: inline-block;
-  background-color: #eef4fc;
-  color: var(--primary-color);
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin-top: 10px;
-}
-
-/* =========================================
-   5. 버튼 디자인 (Buttons) - 어디서든 쓰세요!
-   ========================================= */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-  transition: all 0.2s;
-  text-decoration: none; /* a태그일 경우 밑줄 제거 */
-}
-
-/* 기본 버튼 (검정) */
-.btn-dark {
-  background-color: var(--dark-color);
-  color: white;
-}
-.btn-dark:hover { background-color: black; }
-
-/* 주요 버튼 (파랑) */
-.btn-primary {
-  background-color: var(--primary-color);
-  color: white;
-}
-.btn-primary:hover { background-color: var(--primary-hover); }
-
-/* 위험 버튼 (빨강) */
-.btn-danger {
-  background-color: var(--danger-color);
-  color: white;
-}
-.btn-danger:hover { background-color: var(--danger-hover); }
-
-/* 아웃라인 버튼 (배경 투명) */
-.btn-outline {
-  background-color: transparent;
-  border: 2px solid var(--border-color);
-  color: var(--dark-color);
-}
-.btn-outline:hover {
-  border-color: var(--dark-color);
-  background-color: #f0f0f0;
-}
-
-/* 작고 귀여운 삭제 버튼 (카드 내부용) */
-.btn-icon-delete {
-  background: none;
-  border: none;
-  color: var(--danger-color);
-  cursor: pointer;
-  font-size: 1.2rem;
-  padding: 5px;
-  transition: transform 0.2s;
-}
-.btn-icon-delete:hover { transform: scale(1.2); }
-
-/* =========================================
-   6. 입력 폼 디자인 (Inputs)
-   ========================================= */
-.input-group {
-  margin-bottom: 15px;
-}
-
-.input-field, .textarea-field {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: border-color 0.3s;
-  font-family: inherit;
-}
-
-.input-field:focus, .textarea-field:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-}
-
-.textarea-field {
-  resize: vertical; /* 세로로만 늘어나게 */
-  min-height: 100px;
-}
-
-
-/* =========================================
-   7. 네비게이션 바 (Navbar)
-   ========================================= */
-.navbar {
-  position: fixed; /* 화면 상단에 딱 고정! */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 70px; /* 높이 고정 (나중에 스크롤 계산할 때 중요) */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 50px;
-  z-index: 1000; /* 다른 요소들보다 무조건 위에 뜨게 */
-  
-  /* 유리 같은 반투명 효과 (Glassmorphism) */
-  background-color: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.logo {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--dark-color);
-  cursor: pointer;
-}
-
-.nav-menu {
-  display: flex;
-  gap: 30px;
-}
-
-/* 메뉴 링크 스타일 */
-.nav-link {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #666;
-  cursor: pointer;
-  transition: color 0.2s;
-  position: relative;
-}
-
-.nav-link:hover {
-  color: var(--primary-color);
-}
-
-/* 현재 보고 있는 섹션일 때 (Active) - react-scroll이 자동으로 붙여줌! */
-.nav-link.active {
-  color: var(--primary-color);
-}
-
-/* 활성화됐을 때 밑줄 긋기 애니메이션 */
-.nav-link.active::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background-color: var(--primary-color);
-}
-
-/* =========================================
-   8. 관리자 페이지 레이아웃 (Admin Layout)
-   ========================================= */
-.admin-container {
-  display: flex;
-  min-height: 100vh;
-  background-color: #f4f6f9;
-}
-
-/* 사이드바 스타일 */
-.sidebar {
-  width: 260px;
-  background-color: #2c3e50; /* 진한 남색 */
-  color: white;
-  padding: 30px 20px;
-  display: flex;
-  flex-direction: column;
-  position: fixed; /* 왼쪽 고정 */
-  height: 100%;
-}
-
-.sidebar-logo {
-  font-size: 1.5rem;
-  margin-bottom: 50px;
-  text-align: center;
-  color: #fff;
-}
-
-.sidebar-menu {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  height: 100%; /* 로그아웃 버튼을 아래로 밀기 위해 */
-}
-
-.sidebar-menu li {
-  padding: 15px 20px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.2s;
-}
-
-.sidebar-menu li:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.sidebar-menu li.active {
-  background-color: var(--primary-color);
-  color: white;
-  font-weight: bold;
-  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
-}
-
-/* 콘텐츠 영역 스타일 */
-.admin-content {
-  flex: 1; /* 남은 공간 다 차지하기 */
-  margin-left: 260px; /* 사이드바 너비만큼 밀기 */
-  padding: 40px;
-}
-
-.page-title {
-  font-size: 1.8rem;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-.content-box {
-  background: white;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: var(--shadow);
-}
-
+/* 폼 감싸는 박스 스타일 */
 .form-wrapper {
   max-width: 600px;
-  margin: 0 auto 50px auto; /* 아래 여백 포함 */
+  margin: 0 auto 40px auto;
 }
 
-/* [NEW] 리스트(댓글 등)를 중앙에 배치하는 래퍼 */
+/* 댓글 리스트 스타일 */
 .list-wrapper {
   max-width: 800px;
   margin: 0 auto;
 }
 
-/* [NEW] 텍스트 하이라이트 (색상 변수 사용!) */
-.text-highlight {
-  color: var(--primary-color);
-  font-weight: bold;
+/* 답글 영역 스타일 (대댓글) */
+.reply-box {
+  background: rgba(0, 0, 0, 0.3); /* 더 어둡게 */
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 15px;
+  border-left: 2px solid var(--primary-neon);
+}
+
+/* =========================================
+    배경 조명 효과 (Blob) & 애니메이션
+   ========================================= */
+
+/* [배경 조명 (Blob)] - 칙칙함을 없애는 핵심! */
+.bg-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px); /* 빛을 강하게 퍼뜨림 */
+  opacity: 0.4; /* 은은하게 */
+  z-index: -1; /* 컨텐츠 뒤로 보내기 */
+  /* 애니메이션 (선택사항): 조명이 천천히 숨쉬듯 움직임 
+     너무 정신없으면 animation 속성만 주석 처리하세요.
+  */
+  animation: moveBlob 10s infinite alternate ease-in-out;
+}
+
+/* 보라색 조명 */
+.blob-purple {
+  background: var(--primary-neon);
+  width: 400px;
+  height: 400px;
+}
+
+/* 분홍색 조명 (포인트 컬러 추가) */
+.blob-pink {
+  background: #ec4899; /* 핑크색 */
+  width: 300px;
+  height: 300px;
+  animation-delay: -5s; /* 보라색이랑 엇박자로 움직이게 */
+}
+
+/* 조명 움직임 정의 */
+@keyframes moveBlob {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(50px, -50px) scale(1.1); }
+}
+
+
+/* [스크롤 등장 애니메이션 (Fade Up)] */
+/* 기본 상태: 투명하고 약간 아래로 내려가 있음 */
+.fade-up-element {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+/* 화면에 나타났을 때 붙여줄 클래스 (JS로 제어 예정) */
+.fade-up-element.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 순차적 등장을 위한 딜레이 */
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.3s; }
+.delay-3 { transition-delay: 0.5s; }
+.delay-4 { transition-delay: 0.7s; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ---------------------- Media ------------------------------*/
+
+@media (max-width: 769px){
+  .mobile-close-btn {
+    display: none;
+  }
+}
+
+/* [모바일 사이드바] */
+@media (max-width: 768px) {
+  /* 평소엔 숨기기 */
+  .sidebar {
+    display: flex !important;/* none에서 flex로 변경 */
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 250px;
+    background: rgba(5,5,5,0.95);
+    backdrop-filter: blur(15px);
+    border-right: 1px solid var(--glass-border);
+    border-radius: 0;
+
+    transform: translateX(-100%); /* 왼쪽 화면 밖으로 밀어두기 */
+    transition: transform 0.3s ease-in-out;
+    z-index: 2000;
+  }
+
+  .sidebar.open {
+    transform: translate(0);
+  }
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1500;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .overlay.visible {
+    opacity: 1;
+    visibility: visible;
+  }
 }

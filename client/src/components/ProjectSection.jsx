@@ -11,23 +11,55 @@ function ProjectSection(){
         fetch(`${BASE_URL}/api/projects`)
         .then((res) => res.json())
         .then((data) => {
-            console.log('데이터 도착 : ',  data);
-            setProjects(data); // 그릇(state)에 담기! -> 화면이 자동으로 바뀜
+              const mainProjectId = 42; 
+
+              const sortedData = [...data].sort((a, b) => {
+
+                  const idA = Number(a.id);
+                  const idB = Number(b.id);
+                  const target = Number(mainProjectId);
+                  // a가 메인이면 앞으로(-1), b가 메인이면 뒤로(1)
+                  if (idA === target) return -1;
+                  if (idB === target) return 1;
+                  // 나머지는 최신순(ID 큰게 위로) 또는 등록순 정렬
+                  return idB - idA;
+              });
+
+              console.log('정렬된 데이터:', sortedData);
+              setProjects(sortedData); // 그릇(state)에 담기! -> 화면이 자동으로 바뀜
         })
         .catch((err) => console.error('에러 발생 : ', err));
     }, []);
 
     return (
         <section id="projects" className="section-spacer">
-          <h2 className="section-title text-left">📂 My Projects</h2>
+          <div className="container">
+            <h2 className="section-title text-center fade-up-element">
+               Featured<span className="text-highlight"> Projects</span>
+            </h2>
 
-          <div className="grid">
-            {projects.map((project) => (
-              // 긴 코드 대신 <ProjectCard /> 한줄로 끝
-              // ** key 는 리액트가 목록 관리할 때 필요해서 넣어주고,
-              // project={project}로 데이터를 통째로 넘겨준다. props?
-              <ProjectCard key={project.id} project={project} />
-            ))}
+            <p className="text-center fade-up-element delay-1" style={{ color: '#aaa', marginBottom: '40px' }}>
+            
+            </p>
+
+            <div className="bento-grid">
+              {projects.map((project, index) => {
+                // 🍱 벤토 그리드 로직: 
+                // 첫 번째(index 0) 프로젝트는 2칸x2칸 차지하게 (대장 프로젝트)
+                // 네 번째(index 3) 프로젝트는 가로로 2칸 차지하게 (와이드 프로젝트)
+                let sizeClass = "";
+                if(index === 0) sizeClass= "col-span-2 row-span-2";
+                else if(index === 3) sizeClass = "col-span-2";
+                
+                return (
+                  <ProjectCard
+                    key={project.id}
+                    project={project}
+                    className={sizeClass}
+                  />
+                );
+            })}
+            </div>
           </div>
         </section>
     );

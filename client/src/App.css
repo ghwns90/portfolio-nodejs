@@ -72,7 +72,7 @@ ul { list-style: none; }
 }
 
 /* =========================================
-   3. SIDEBAR COMPONENT (이미지 스타일 구현)
+    SIDEBAR COMPONENT (이미지 스타일 구현)
    ========================================= */
 .sidebar {
   position: fixed;
@@ -194,7 +194,7 @@ ul { list-style: none; }
 }
 
 .card:hover {
-  transform: translateY(-5px);
+  /* transform: translateY(-5px); */
   border-color: rgba(168, 85, 247, 0.3);
   box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
 }
@@ -262,21 +262,31 @@ ul { list-style: none; }
 
 /* 삭제 버튼 (아이콘) */
 .btn-icon-delete {
-  background: transparent;
-  border: none;
-  color: #ff4d4d; /* 빨간색 */
-  cursor: pointer;
-  opacity: 0.6;
-  font-size: 1rem;
-  padding: 5px;
-  transition: all 0.2s;
+    background: transparent;
+    border: none;
+    
+    /* 평소 상태: 아주 은은한 회색 (배경에 묻히게) */
+    color: rgba(255, 255, 255, 0.2); 
+    
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 8px;
+    border-radius: 50%; /* 동그랗게 */
+    transition: all 0.3s ease;
+    
+    /* 위치 미세 조정 */
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 10;
 }
 
+/* 호버 상태: 위험 신호(빨강) 점등! */
 .btn-icon-delete:hover {
-  opacity: 1;
-  transform: scale(1.1);
-  background: rgba(255, 77, 77, 0.1);
-  border-radius: 50%;
+    color: #ff4d4d; /* 밝은 빨강 */
+    background: rgba(255, 77, 77, 0.1); /* 배경에 붉은 기운 살짝 */
+    transform: scale(1.1) rotate(10deg); /* 살짝 커지면서 흔들림 */
+    box-shadow: 0 0 10px rgba(255, 77, 77, 0.4); /* 붉은 빛 */
 }
 
 .btn-primary {
@@ -316,7 +326,7 @@ ul { list-style: none; }
 }
 
 /* =========================================
-    ABOUT SECTION STYLES (보내주신 코드용)
+    ABOUT SECTION STYLES
    ========================================= */
 .about-card-layout {
   display: flex;
@@ -353,7 +363,7 @@ ul { list-style: none; }
 }
 
 .about-title {
-    font-size: 2rem;
+    font-size: 1.3rem;
     line-height: 1.3;
 }
 
@@ -384,6 +394,256 @@ ul { list-style: none; }
     cursor: default;
     position: relative;
     overflow: hidden; /* 빛 효과가 밖으로 안 새어나가게 */
+}
+
+/* =========================================
+    Project Section (Bento Grid)
+   ========================================= */
+
+/* [그리드 레이아웃 정의] */
+.bento-grid {
+    display: grid;
+    /* 기본적으로 3열 그리드 */
+    grid-template-columns: repeat(3, 1fr);
+    /* 행 높이는 자동으로, 최소 250px */
+    grid-auto-rows: minmax(250px, auto);
+    gap: 24px; /* 타일 간격 */
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* [프로젝트 카드 디자인] */
+.project-card {
+    position: relative;
+    overflow: hidden; /* 이미지가 카드 밖으로 나가는 것 방지 */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* 텍스트를 아래로 배치 */
+    padding: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.4s ease;
+    /* 배경이 없으면 그냥 투명 유리 */
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* 카드 호버 효과: 위로 살짝 뜨고 테두리 발광 */
+.project-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-neon);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* [배경 이미지 처리] */
+.project-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    background-image: var(--bg-img);
+    background-size: cover;
+    background-position: center;
+    z-index: 0; /* 글자보다 뒤에 */
+    transition: transform 0.5s ease;
+    
+    /* 💡 중요: 이미지 위에 검은 그라데이션을 씌워서 글씨가 잘 보이게 함 */
+    filter: brightness(0.5); 
+}
+
+/* 호버 시 이미지 확대 및 밝아짐 */
+.project-card:hover .project-bg {
+    transform: scale(1.1); /* 줌 인 효과 */
+    filter: brightness(0.3); /* 글씨 더 잘 보이게 더 어둡게 */
+}
+
+/* [내용물 스타일] */
+.project-content {
+    position: relative;
+    z-index: 1; /* 배경보다 위에 */
+    opacity: 0.9;
+    transition: opacity 0.3s;
+}
+
+/* 호버 시 내용물 완전 선명하게 */
+.project-card:hover .project-content {
+    opacity: 1;
+}
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.project-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.project-desc {
+    color: #ccc;
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+    line-height: 1.5;
+    
+    /* 긴 글은 말줄임표 처리 (최대 3줄) */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* 링크 아이콘 */
+.icon-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    width: 2rem;
+    height: 2rem;
+    margin-left: 5px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    opacity: 0.8;
+    transition: all 0.2s;
+}
+.icon-link:hover {
+    opacity: 1;
+    background: var(--primary-neon);
+    color: #fff;
+    transform: scale(1.1);
+}
+
+/* 미니 스킬 칩 (기존 스킬 칩의 축소판) */
+.project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.skill-chip-mini {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #eee;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* [Grid 크기 제어 클래스] */
+.col-span-2 { grid-column: span 2; }
+.row-span-2 { grid-row: span 2; }
+
+
+/* [반응형] 태블릿 이하에서는 그리드 풀기 */
+@media (max-width: 992px) {
+    .bento-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2열로 변경 */
+    }
+}
+
+@media (max-width: 768px) {
+    .bento-grid {
+        display: flex;
+        flex-direction: column; /* 모바일은 그냥 일자로 쭉 */
+        gap: 20px;
+    }
+    
+    /* 모바일에서는 span 속성 무시하고 원래대로 복구 */
+    .col-span-2, .row-span-2 {
+        grid-column: auto;
+        grid-row: auto;
+    }
+    
+    /* 모바일은 카드 높이 고정 */
+    .project-card {
+        height: 300px; 
+    }
+}
+
+
+/* =========================================
+   11. Guestbook Grid Style
+   ========================================= */
+
+
+/* [핵심] 방명록 그리드 레이아웃 */
+.guestbook-grid {
+    /* 3열로 나누기 (PC 기준) */
+    column-count: 3;
+    column-gap: 20px;
+    
+    /* 너비가 1000px 정도일 때 */
+    width: 100%;
+}
+
+/* 방명록 카드 스타일 */
+.guestbook-card {
+    /* 카드끼리 세로 간격은 margin으로 줘야 함 */
+    margin-bottom: 20px;
+    
+    /* [중요] 카드가 컬럼 사이에서 찢어지는 것 방지 */
+    break-inside: avoid; 
+    
+    /* 디자인 유지 */
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    /* 내용이 너무 짧아도 최소한의 높이는 갖게 (선택사항) */
+    min-height: 120px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* 위아래로 내용 분배 */
+}
+
+.guestbook-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(168, 85, 247, 0.3);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* [반응형] 화면 줄어들면 컬럼 수 조절 */
+@media (max-width: 1024px) {
+    .guestbook-grid {
+        column-count: 2; /* 태블릿은 2열 */
+    }
+}
+
+@media (max-width: 768px) {
+    .guestbook-grid {
+        column-count: 1; /* 모바일은 1열 */
+    }
+}
+
+/* 답글 박스 스타일 */
+.reply-box {
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    border-left: 2px solid #ec4899; /* 핑크색 라인 포인트 */
+}
+
+.form-row {
+    display: flex;
+    gap: 15px; /* 입력창 사이 간격 */
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+/* 닉네임 (짧은 쪽) - 비율 3 */
+.col-sm {
+    flex: 3; 
+}
+
+/* 비밀번호 (긴 쪽) - 비율 7 */
+.col-lg {
+    flex: 7; 
 }
 
 /* [카테고리별 색상 테마 정의] */
@@ -474,7 +734,8 @@ ul { list-style: none; }
 /* [Guestbook & Contact 전용] */
 .section-title {
   font-size: 2rem;
-  margin-bottom: 30px;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
   font-weight: 700;
   background: linear-gradient(to right, #fff, #a1a1aa);
   -webkit-background-clip: text;
@@ -483,23 +744,50 @@ ul { list-style: none; }
 
 /* 폼 감싸는 박스 스타일 */
 .form-wrapper {
-  max-width: 600px;
-  margin: 0 auto 40px auto;
+    width: 100%; 
+    max-width: 100%; 
+    margin: 0 auto 40px auto;
 }
 
-/* 댓글 리스트 스타일 */
-.list-wrapper {
-  max-width: 800px;
-  margin: 0 auto;
+.form-wrapper .card {
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.4); /* 리스트보다 더 어둡고 묵직하게 */
+    border: 1px solid rgba(168, 85, 247, 0.2); /* 보라색 테두리 은은하게 */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* 깊이감 */
 }
 
-/* 답글 영역 스타일 (대댓글) */
-.reply-box {
-  background: rgba(0, 0, 0, 0.3); /* 더 어둡게 */
-  padding: 15px;
-  border-radius: 8px;
-  margin-top: 15px;
-  border-left: 2px solid var(--primary-neon);
+/* 입력창 스타일 디테일 업 */
+.form-wrapper .input-field,
+.form-wrapper .textarea-field {
+    background: rgba(255, 255, 255, 0.05); /* 입력칸은 살짝 밝게 */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: #fff;
+    font-size: 0.95rem;
+}
+
+/* 입력창 포커스 시 네온 효과 */
+.form-wrapper .input-field:focus,
+.form-wrapper .textarea-field:focus {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--primary-neon);
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
+}
+
+/* 전송 버튼: 더 넓고 강렬하게 */
+.form-wrapper button[type="submit"] {
+    margin-top: 10px;
+    height: 50px;
+    font-size: 1.1rem;
+    background: linear-gradient(90deg, #7c3aed, #db2777); /* 보라-핑크 그라데이션 */
+    box-shadow: 0 4px 15px rgba(219, 39, 119, 0.3);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.form-wrapper button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(219, 39, 119, 0.5);
+    filter: brightness(1.2);
 }
 
 /* =========================================

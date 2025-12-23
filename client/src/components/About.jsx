@@ -54,7 +54,7 @@ function About(){
             {/* 오른쪽 하단 핑크색 조명 */}
             <div className="bg-blob blob-pink" style={{ bottom: '-10%', right: '-10%'}}></div>
             <div className="container">
-                <div className="card about-card-layout fade-up-element" >
+                <div className="card about-card-layout">
                     {/* 이미지 */}
                     <div className="profile-section fade-up-element delay-2">
                         <div className="profile-img-wrapper">
@@ -69,20 +69,20 @@ function About(){
                     {/* 텍스트 */}
                     <div className="info-section">
                         <h1 className="about-title fade-up-element delay-2">
+                            <span style={{ fontSize: '1.5rem', marginTop: '10px', display: 'block'}}>
+                                {profile.name}
+                            </span>
                             {profile.title.split('\n').map((line, i) => (
-                                <span key={i}>
+                                <span key={i} style={{ color:'#ccc'}}>
                                     {line}
                                     <br/>
                                 </span>
                             ))}
-                            <span className="text-highlight" style={{ fontSize: '1.5rem', marginTop: '10px', display: 'block'}}>
-                                {profile.name}
-                            </span>
                         </h1>
 
                         <div className="about-desc fade-up-element delay-3">
                             {profile.description.split('\n').map((line, index) => (
-                                <p key={index} style={{marginBottom: '10px'}}>{line}</p>
+                                <p key={index} style={{marginTop: '8px', color:'#aaa'}}>{line}</p>
                             ))}
                         </div>
                         {/* 기술 스택 */}

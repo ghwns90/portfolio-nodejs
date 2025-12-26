@@ -16,12 +16,12 @@ function Home() {
         {/* 프로젝트 섹션 */}
         <ProjectSection />
         <div className="divider"></div>
-
         {/* 방명록 섹션 ID: guestbook */}        
         <Guestbook />
-        
         {/* Contact 섹션 */}
         <Contact />
+        
+        
       </div>
     </>
     

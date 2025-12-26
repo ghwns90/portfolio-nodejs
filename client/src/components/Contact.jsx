@@ -43,7 +43,7 @@ function Contact() {
 
     return (
         <section id="contact" className="section-spacer">
-            <h2 className="section-title text-center">Contact Me</h2>
+            <h2 className="section-title text-left">Contact</h2>
 
             <div className="form-wrapper">
                 <form onSubmit={handleSubmit} className="card">

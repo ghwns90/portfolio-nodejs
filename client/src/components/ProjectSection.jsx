@@ -34,7 +34,7 @@ function ProjectSection(){
     return (
         <section id="projects" className="section-spacer">
           <div className="container">
-            <h2 className="section-title text-center fade-up-element">
+            <h2 className="section-title text-left fade-up-element">
                Featured<span className="text-highlight"> Projects</span>
             </h2>
 

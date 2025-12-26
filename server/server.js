@@ -1,5 +1,8 @@
 // express 모듈을 불러온다
 const express = require('express');
+const multer = require('multer'); // 파일 업로드 라이브러리
+const path = require('path');
+const fs = require('fs');
 const db = require('./config/db');
 const cors = require('cors');
 //------------ routes------------------------
@@ -15,6 +18,12 @@ const port = 3000;
 
 app.use(express.json());
 app.use(cors());    //cors 모든 요청 허용하기
+
+// 정적 파일 제공 설정 (이게 있어야 브라우저에서 이미지를 볼 수 있음)
+// 브라우저가 "http://localhost:3000/uploads/파일명.jpg"로 요청하면 uploads 폴더를 보여줌
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+
 
 // /api/auth 로 시작하는 요청은 authRoutes로 보내라
 app.use('/api/auth', authRoutes);

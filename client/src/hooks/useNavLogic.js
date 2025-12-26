@@ -12,7 +12,7 @@ export const useNavLogic = () => {
     const isNavigating = useRef(false);
 
     // 스크롤 종료 감지 타이머
-    const scrollTimeout = useRef(null);
+    const scrollDebounceTimer = useRef(null);
 
     // 스크롤 위치를 감시하는 함수 (Scroll Spy Logic)
     useEffect(()=>{
@@ -23,36 +23,33 @@ export const useNavLogic = () => {
 
             // Debounce
             // 스크롤 이벤트가 발생할 때마다 기존 타이머를 취소
-            if (scrollTimeout.current) {
-                clearTimeout(scrollTimeout.current);
+            if (scrollDebounceTimer.current) {
+                clearTimeout(scrollDebounceTimer.current);
             }
-            // "0.1초 뒤에는 이동이 끝난 걸로 치자"라고 새 타이머 설정
-            scrollTimeout.current = setTimeout(() => {
-                // 0.1초 동안 스크롤 이벤트가 한 번도 안 오면 여기가 실행됨!
-                isNavigating.current = false; // "도착했으니 눈 떠!"
+
+            // 새로운 타이머 설정: "0.1초 뒤에도 소식 없으면 끝난 걸로 알게!"
+            scrollEndTimer.current = setTimeout(() => {
+                // 여기가 실행됐다는 건 스크롤이 진짜 멈췄다는 뜻
+                isNavigating.current = false; 
             }, 100);
 
-            // 만약 "이동 중(깃발 true)"이라면? -> 스파이 로직은 실행하지 않음 (return)
-            if (isNavigating.current) return;
+            if (isNavigating.current) return;            
             
             const sections = document.querySelectorAll('.section-spacer');
-            // 현재 스크롤 위치(Navbar 높이 70px 정도 여유를 줌)
-            const scrollPosition = window.scrollY + 100;
+            const scrollPosition = window.scrollY + (window.innerHeight / 3);
 
-            // 각 섹션을 돌면서 위치 확인
-            for(const sectionId of sections){
-                const element = document.getElementById(sectionId);
-                if(!element) continue;
+            for (const section of sections) {
+                if (!section) continue;
 
-                // 요소의 시작위치와 끝 위치 계산
-                const offsetTop = element.offsetTop;
-                const offsetHeight = element.offsetHeight;
+                const elementTop = section.getBoundingClientRect().top + window.scrollY;
+                const elementBottom = elementTop + section.offsetHeight;
 
-                // 현재 스크롤이 이 섹션안에 들어왔나? 확인
-                if(scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight){
-                    setActiveSection(sectionId); // 현재 섹션 업데이트
+                if (scrollPosition >= elementTop && scrollPosition < elementBottom) {
+                    setActiveSection(section.id);
+                    break; 
                 }
             }
+            
         };    
 
         // 스크롤 할 때마다 handleScroll 실행해라! (이벤트 등록)
@@ -61,17 +58,43 @@ export const useNavLogic = () => {
         // 청소하기 : 컴포넌트가 사라지면 감시도 그만둬야 함(메모리 누수 방지)
         return () => {
             window.removeEventListener('scroll', handleScroll);
-
-            if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+            if (scrollDebounceTimer.current) clearTimeout(scrollDebounceTimer.current);
         };
     }, [location.pathname]); // 주소가 바뀔 때마다 재실행
 
-    // 2. 부드러운 이동 로직
+    useEffect(()=> {
+        // 홈 화면이고, state에 targetId가 들어있다면?
+        if(location.pathname === '/' && location.state?.targetId) {
+            const targetId = location.state.targetId;
+
+            isNavigating.current = true;
+            setActiveSection(targetId);
+
+            setTimeout(()=> {
+                const element = document.getElementById(targetId);
+                if(element){
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.scrollY - (window.innerHeight / 4);
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+
+                }else{
+                    isNavigating.current = false;
+                }                
+            }, 300);
+
+            navigate('/', { replace: true, state: {} });
+        }
+    }, [location]);
+    // 부드러운 이동 로직
     const scrollToSection = (sectionId) => {
+
         if (location.pathname !== '/') {
-        navigate('/');
-        setTimeout(() => scrollToSection(sectionId), 100);
-        return;
+            navigate('/', { state : {targetId: sectionId }});
+            return;
         }
         
         const element = document.getElementById(sectionId);
@@ -80,17 +103,19 @@ export const useNavLogic = () => {
             setActiveSection(sectionId); // 클릭하자마자 활성화
         
             const elementPosition = element.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.scrollY - 40; // 사이드바라 상단 여백 많이 필요 없음
+            const offsetPosition = elementPosition + window.scrollY - (window.innerHeight / 4); // 사이드바라 상단 여백 많이 필요 없음
 
             window.scrollTo({
                 top: offsetPosition,
                 behavior: 'smooth'
             });
+
         }
     };
 
     // 3. 로그아웃 로직
     const isLoggedIn = !!localStorage.getItem('token');
+
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('refreshToken'); // 둘다 지우기!
@@ -100,5 +125,5 @@ export const useNavLogic = () => {
     };
 
     // 디자인 컴포넌트들이 갖다 쓸 수 있게 리턴
-    return { activeSection, scrollToSection, isLoggedIn, handleLogout, navigate };
+    return { activeSection, scrollToSection, isLoggedIn, handleLogout, navigate, location };
 };

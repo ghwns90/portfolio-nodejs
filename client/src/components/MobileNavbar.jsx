@@ -20,7 +20,6 @@ const MobileNavbar = ({ onOpen }) => {
         HoJunior
       </div>
       
-      {/* 모바일은 공간이 좁아서 보통 햄버거 메뉴를 넣거나 심플하게 처리 */}
       <div style={{ display: 'flex', gap: '15px' }}>
          <button onClick={() => navigate('/login')} className="btn-primary" style={{padding: '5px 15px', fontSize:'0.8rem'}}>
             Login

@@ -112,7 +112,7 @@ function Guestbook(){
     return (
         <section id="guestbook" className="section-spacer">
             <div className="container">
-                <h2 className="section-title text-center fade-up-element">방명록</h2>
+                <h2 className="section-title text-left fade-up-element">방명록</h2>
 
                 <div className="form-wrapper fade-up-element delay-1">
                     <form onSubmit={handleSubmit} className="card">
@@ -150,7 +150,7 @@ function Guestbook(){
                                     {/* 랜덤 아바타 느낌의 원 */}
                                     <div style={{
                                         width: '30px', height: '30px', borderRadius: '50%',
-                                        background: 'linear-gradient(135deg, #a855f7, #ec4899)'
+                                        background: '#cccccc'
                                     }}></div>
                                     <strong style={{ color: '#fff', fontSize: '1.05rem' }}>{comment.username}</strong>
                                 </div>        

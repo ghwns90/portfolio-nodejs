@@ -4,12 +4,12 @@ import Home from './pages/Home';
 import Admin from './pages/Admin';
 import Login from './pages/Login';
 import RequireAuth from './components/RequireAuth';
+import MainLayout from './layouts/MainLayout';
 import { useAuthCheck } from './hooks/useAuthCheck';
-import {FaHome, FaProjectDiagram} from 'react-icons/fa'; 
-import Sidebar from './components/Sidebar';
-import MobileNavbar from './components/MobileNavbar';
-import { useState } from 'react';
 import { useScrollAnimation } from './hooks/useScrollAnimation';
+import ProjectManager from './components/admin/ProjectManager';
+import ProfileEditor from './components/admin/ProfileEditor';
+import MessageManager from './components/admin/MessageManager';
 import './App.css'
 
 function App() {
@@ -18,40 +18,40 @@ function App() {
 
   useScrollAnimation();
   
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
   if(isLoading){
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
-        <h3>Loading... ⏳</h3>
-      </div>
-    );
+        <div style={{ 
+            height: '100vh', 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            background: '#000' // 전체 배경 검게
+        }}>
+          {/* 네온 효과가 들어간 스피너 */}
+          <div className="loading-spinner"></div>
+        </div>
+      );
   }
   
   return (
-    <div className="app-container">
-
-      <div
-        className={`overlay ${isMobileMenuOpen ? 'visible' : ''}`}
-        onClick={()=> setIsMobileMenuOpen(false)}
-      ></div>
-      <Sidebar isOpen={isMobileMenuOpen} onClose={()=> setIsMobileMenuOpen(false)}/>
-      <MobileNavbar onOpen={()=> setIsMobileMenuOpen(true)}/>
+    
+    <Routes>
+      {/* 일반 사용자용 (MainLayout 적용) */}
+      <Route element={<MainLayout/>}>
+        <Route path="/" element={<Home />}/>
+        <Route path="/login" element={<Login />}/>
+      </Route>
+      {/* 관리자용 (Admin 레이아웃 적용) */}
+      <Route path="/admin" element={<RequireAuth><Admin /></RequireAuth>} >
+        <Route index element={<ProfileEditor />} />
+        <Route path="profile" element={<ProfileEditor />} /> {/* /admin/profile */}
+        <Route path="projects" element={<ProjectManager />} /> {/* /admin/projects */}
+        <Route path="messages" element={<MessageManager />} /> {/* /admin/messages */}
+      </Route>
+    </Routes>
+   
       
-      {/* 3. 메인 컨텐츠 */}
-      <main className="main-content">
-        <Routes>
-            {/* path="/" : 메인 주소로 오면 <Home />을 보여줘라 */}
-            <Route path="/" element={<Home />} />
-            
-            {/* path="/admin" : 관리자 주소로 오면 <Admin />을 보여줘라 */}
-            <Route path="/login" element={<Login />} />
-
-            <Route path="/admin" element={<RequireAuth><Admin /></RequireAuth>} />
-        </Routes>
-      </main>
-      
-    </div>    
+    
   );
 }
 

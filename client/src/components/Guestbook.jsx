@@ -112,9 +112,9 @@ function Guestbook(){
     return (
         <section id="guestbook" className="section-spacer">
             <div className="container">
-                <h2 className="section-title text-left fade-up-element">방명록</h2>
+                <h2 className="section-title text-left">방명록</h2>
 
-                <div className="form-wrapper fade-up-element delay-1">
+                <div className="form-wrapper">
                     <form onSubmit={handleSubmit} className="card">
                         <div className="form-row">
                             <div className="col-sm">

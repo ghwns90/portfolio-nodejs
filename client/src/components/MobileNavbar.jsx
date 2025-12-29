@@ -3,7 +3,7 @@ import { useNavLogic } from '../hooks/useNavLogic';
 import { FaBars } from 'react-icons/fa'; // 햄버거 메뉴 아이콘 등
 
 const MobileNavbar = ({ onOpen }) => {
-  const { navigate } = useNavLogic(); // 여기선 간단하게 이동만 필요하다면
+  const { navigate, isLoggedIn, handleLogout } = useNavLogic(); // 여기선 간단하게 이동만 필요하다면
 
   return (
     <header className="navbar-mobile">
@@ -21,9 +21,27 @@ const MobileNavbar = ({ onOpen }) => {
       </div>
       
       <div style={{ display: 'flex', gap: '15px' }}>
-         <button onClick={() => navigate('/login')} className="btn-primary" style={{padding: '5px 15px', fontSize:'0.8rem'}}>
-            Login
-         </button>
+         {isLoggedIn ? (
+            <button 
+              onClick={handleLogout} 
+              className="btn-primary" 
+              style={{
+                  padding: '5px 15px', 
+                  fontSize:'0.8rem', 
+                  backgroundColor: '#ff4444' 
+              }}
+            >
+              Logout
+            </button>
+         ) : (
+            <button 
+              onClick={() => navigate('/login')} 
+              className="btn-primary" 
+              style={{padding: '5px 15px', fontSize:'0.8rem'}}
+            >
+              Login
+            </button>
+         )}
       </div>
     </header>
   );

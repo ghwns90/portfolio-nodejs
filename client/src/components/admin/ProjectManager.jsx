@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import CreateProject from '../../CreateProject'; // 경로 주의! (../../)
+import { BASE_URL } from '../../constants';
 
 function ProjectManager(){
 
     const [projects, setProjects] = useState([]);
 
     useEffect(()=> {
-        fetch('http://localhost:3000/api/projects')
+        fetch(`${BASE_URL}/api/projects`)
             .then((res) => res.json())
             .then((data) => setProjects(data))
             .catch((err) => console.error(err));
@@ -22,7 +23,7 @@ function ProjectManager(){
         const token = localStorage.getItem('token');
 
         // 백엔드에 삭제 요청 보내기
-        fetch(`http://localhost:3000/api/projects/${id}`, {
+        fetch(`${BASE_URL}/api/projects/${id}`, {
             method : 'DELETE',
             headers: {
                 'Authorization' : `Bearer ${token}`,
@@ -44,30 +45,30 @@ function ProjectManager(){
     return (
 
         <div>
-            <h3>📋 프로젝트 관리</h3>
+            <h2 className="section-title"> 프로젝트 관리</h2>
             {/* 글쓰기 폼 */}
             <CreateProject onProjectAdded={handleProjectAdded} />
             
-            <hr style={{ margin: '30px 0', border: '0', borderTop: '1px solid #eee' }} />
+            <div style={{ margin: '50px 0 20px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h3 style={{ color: '#ccc' }}>현재 등록된 프로젝트 ({projects.length})</h3>
+                <div style={{ height: '1px', flex: 1, background: '#333', marginLeft: '20px' }}></div>
+            </div>
 
             {/* 목록 */}
-            <div className="grid">
+            <div className="grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
                 {projects.map((project) => (
-                    <div key={project.id} className="card">
-                        <img src={project.image_url} alt={project.title} className="card-img" />
+                    <div key={project.id} className="card" style={{position: 'relative'}}>
+                        <img src={project.image_url} alt={project.title} className="card-img" style={{ height: '150px' }}/>
                         <div className="card-content">
-                            <h3>{project.title}</h3>
+                            <h4>{project.title}</h4>
+                            <p style={{ fontSize: '0.85rem', color: '#888', marginBottom: '10px' }}>{project.description}</p>
+
                             <button
                                 onClick={() => handleDelete(project.id)}
+                                className="btn"
                                 style={{
-                                    backgroundColor: '#ff4444', 
-                                    color: 'white', 
-                                    border: 'none', 
-                                    padding: '8px 12px', 
-                                    borderRadius: '5px', 
-                                    cursor: 'pointer',
-                                    marginTop: '10px',
-                                    width: '100%'
+                                    position: 'absolute', top: '10px', right: '10px',
+                                    background: 'rgba(255, 68, 68, 0.8)', padding: '5px 8px', fontSize: '0.8rem'
                                 }}
                             >
                                 🗑

@@ -2,7 +2,10 @@ import React from 'react';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 
 // 부모에게서 'project'라는 데이터 하나를 선물(Props)로 받음.
-function ProjectCard({ project, className="" }) {
+function ProjectCard({ project, className="", style={}, animated = true }) {
+
+  // animated가 true일 때만 'fade-up-element' 클래스를 붙임
+  const animationClass = animated ? "fade-up-element delay-2" : "";
 
   // 기술 스택 문자열을 배열로 변환
   const tags = project.tech_stack ? project.tech_stack.split(',') : [];
@@ -12,8 +15,15 @@ function ProjectCard({ project, className="" }) {
     : "https://placehold.co/600x400/1a1a1a/666666/png?text=Project+Image";
 
   return (
-    <div className={`card project-card fade-up-element delay-2 ${className}`}
-      style ={{ '--bg-img': `url(${bgImage})`}}
+    <div className={`card project-card ${animationClass} ${className}`}
+      style ={{ 
+        '--bg-img': `url(${bgImage})`, 
+        minHeight: '420px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-end',
+        ...style
+      }}
     >
       {/* 배경 오버레이 (어둡게 만들기) */}
       <div className="project-bg"></div>

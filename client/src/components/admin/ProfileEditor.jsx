@@ -29,7 +29,7 @@ function ProfileEditor(){
 
     // 파일 선택시 실행 되는 함수(미리보기 생성)
     const handleFileChange = (e) => {
-        const file = e.target.file[0];
+        const file = e.target.files[0];
         if(file) {
             setSelectedFile(file);
             // 브라우저 메모리에 있는 파일을 볼 수 있는 임시 URL 생성(미리보기용)
@@ -145,8 +145,7 @@ function ProfileEditor(){
                             background: '#000'
                         }}>
                             <img 
-                                src={previewUrl || profile.profile_image_url || 'https://via.placeholder.com/100'} 
-                                alt="Profile Preview" 
+                                src={previewUrl || profile.profile_image_url } 
                                 style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
                             />
                         </div>

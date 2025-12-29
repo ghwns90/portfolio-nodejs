@@ -37,7 +37,7 @@ function App() {
     
     <Routes>
       {/* 일반 사용자용 (MainLayout 적용) */}
-      <Route element={<MainLayout/>}>
+      <Route element={<MainLayout />}>
         <Route path="/" element={<Home />}/>
         <Route path="/login" element={<Login />}/>
       </Route>

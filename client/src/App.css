@@ -61,15 +61,6 @@ ul { list-style: none; }
   width: calc(100% - var(--sidebar-width));
 }
 
-/* 모바일 대응 (사이드바 숨기고 전체 너비) */
-@media (max-width: 768px) {
-  .main-content {
-    margin-left: 0;
-    width: 100%;
-    padding: 20px;
-    padding-top: 80px; /* 상단 네비게이션 공간 확보 */
-  }
-}
 
 /* 모바일 닫기 버튼 (PC에선 숨김) */
 .mobile-close-btn {
@@ -93,26 +84,6 @@ ul { list-style: none; }
     display: none;
     opacity: 0;
     transition: opacity 0.3s;
-}
-
-/* 모바일 화면에서만 동작 */
-@media (max-width: 992px) {
-    .mobile-close-btn {
-        display: block; 
-    }
-
-    .sidebar-overlay.open {
-        display: block;
-        opacity: 1;
-    }
-
-    /* 사이드바가 열리면 화면 안으로 들어옴 */
-    .sidebar-container {
-        transform: translateX(-100%); /* 평소엔 왼쪽으로 숨음 */
-    }
-    .sidebar-container.open {
-        transform: translateX(0); /* 열리면 등장 */
-    }
 }
 
 /* =========================================
@@ -215,12 +186,6 @@ ul { list-style: none; }
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-}
-
-@media (max-width: 768px) {
-  .navbar-mobile {
-    display: flex;
-  }
 }
 
 /* =========================================
@@ -504,9 +469,11 @@ ul { list-style: none; }
 /* [내용물 스타일] */
 .project-content {
     position: relative;
-    z-index: 1; /* 배경보다 위에 */
+    z-index: 2; /* 배경보다 위에 */
     opacity: 0.9;
     transition: opacity 0.3s;
+    width: 100%;
+    margin-top: auto;
 }
 
 /* 호버 시 내용물 완전 선명하게 */
@@ -542,6 +509,14 @@ ul { list-style: none; }
 }
 
 /* 링크 아이콘 */
+
+.project-links {
+  position: fixed;
+  display : flex;
+  flex-direction: column;
+  top : 10px;
+  right : 10px;
+}
 .icon-link {
     display: inline-flex;
     align-items: center;
@@ -651,19 +626,6 @@ ul { list-style: none; }
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-/* [반응형] 화면 줄어들면 컬럼 수 조절 */
-@media (max-width: 1024px) {
-    .guestbook-grid {
-        column-count: 2; /* 태블릿은 2열 */
-    }
-}
-
-@media (max-width: 768px) {
-    .guestbook-grid {
-        column-count: 1; /* 모바일은 1열 */
-    }
-}
-
 /* 답글 박스 스타일 */
 .reply-box {
     margin-top: 15px;
@@ -729,37 +691,6 @@ ul { list-style: none; }
     box-shadow: 0 0 15px rgba(244, 114, 182, 0.4);
     transform: translateY(-3px);
     color: #fff;
-}
-
-/* [반응형] 모바일에서는 위아래로 배치 */
-@media (max-width: 992px) { /* 태블릿 이하 */
-    .about-card-layout {
-        flex-direction: column; /* 위아래로 쌓기 */
-        text-align: center;
-        padding: 30px;
-        gap: 30px;
-    }
-    
-    .profile-section {
-        flex: 0 0 auto;
-    }
-    
-    .profile-img-wrapper {
-        width: 200px;
-        height: 200px;
-        margin: 0 auto; /* 가운데 정렬 */
-    }
-
-    .info-section {
-        text-align: center;
-    }
-    
-    .skills-wrapper {
-        justify-content: center; /* 모바일에선 가운데 정렬 */
-    }
-    .tech-stack-container {
-        text-align: center;
-    }
 }
 
 /* [레이아웃 유틸] */
@@ -907,7 +838,13 @@ ul { list-style: none; }
     to { transform: rotate(360deg); }
 }
 
-
+/*  -----------------------------------------------------  */
+.preview-section .project-card {
+    margin: 0;
+    cursor: default; /* 프리뷰에선 클릭 안 되게 */
+    pointer-events: none; /* 프리뷰 내 링크 클릭 방지 */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* 좀 더 띄워주기 */
+}
 
 
 
@@ -919,51 +856,134 @@ ul { list-style: none; }
 
 /* ---------------------- Media ------------------------------*/
 
-@media (max-width: 769px){
-  .mobile-close-btn {
-    display: none;
-  }
+@media (max-width: 1100px) {
+    .admin-create-card {
+        flex-direction: column !important;
+    }
+    .preview-section {
+        border-left: none !important;
+        border-top: 1px solid #333;
+        padding-top: 30px;
+        padding-left: 0 !important;
+    }
 }
 
-/* [모바일 사이드바] */
+/* =========================================
+   [2] 모바일 & 태블릿 (Mobile Standard)
+   사이드바 동작 및 모바일 전용 UI
+   ========================================= */
 @media (max-width: 768px) {
-  /* 평소엔 숨기기 */
-  .sidebar {
-    display: flex !important;/* none에서 flex로 변경 */
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 250px;
-    background: rgba(5,5,5,0.95);
-    backdrop-filter: blur(15px);
-    border-right: 1px solid var(--glass-border);
-    border-radius: 0;
+    
+    /* 1. 모바일에서만 보이는 요소들 */
+    .mobile-close-btn {
+        display: block !important; /* 평소엔 없다가 모바일에서만 등장 */
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 2002;
+        /* 스타일링 추가 필요시 작성 */
+    }
 
-    transform: translateX(-100%); /* 왼쪽 화면 밖으로 밀어두기 */
-    transition: transform 0.3s ease-in-out;
-    z-index: 2000;
-  }
+    .navbar-mobile {
+        display: flex !important; /* 모바일 상단 네비게이션 표시 */
+    }
 
-  .sidebar.open {
-    transform: translate(0);
-  }
+    /* 2. 메인 컨텐츠 여백 조정 */
+    .main-content {
+        margin-left: 0 !important;
+        width: 100%;
+        padding: 20px;
+        padding-top: 80px; /* 상단바 높이만큼 띄우기 */
+    }
 
-  .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 998;
-    opacity: 0;
-    display: none;
-    transition: opacity 0.3s;
-  }
+    /* 3. 사이드바 (숨김 -> 등장 로직) */
+    .sidebar {
+        display: flex !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh; /* 모바일 브라우저 주소창 고려 */
+        width: 250px;
+        background: rgba(5,5,5,0.95);
+        backdrop-filter: blur(15px);
+        border-right: 1px solid var(--glass-border);
+        z-index: 2000;
+        
+        /* 애니메이션 핵심: 왼쪽으로 숨겼다가(translateX -100%) */
+        transform: translateX(-100%); 
+        transition: transform 0.3s ease-in-out;
+    }
 
-  .overlay.visible {
-    opacity: 1;
-    display: block;
-  }
+    /* 열렸을 때 클래스 (.open) */
+    .sidebar.open{
+        transform: translateX(0) !important; /* 원위치로 등장 */
+    }
+
+    /* 4. 오버레이 (검은 배경) */
+    .overlay, 
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 998;
+        display: none; /* 평소엔 숨김 */
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    /* 오버레이 활성화 */
+    .overlay.visible, 
+    .sidebar-overlay.open {
+        display: block;
+        opacity: 1;
+    }
+}
+   
+
+
+/* [반응형] 모바일에서는 위아래로 배치 */
+@media (max-width: 992px) { /* 태블릿 이하 */
+    .about-card-layout {
+        flex-direction: column; /* 위아래로 쌓기 */
+        text-align: center;
+        padding: 30px;
+        gap: 30px;
+    }
+    
+    .profile-section {
+        flex: 0 0 auto;
+    }
+    
+    .profile-img-wrapper {
+        width: 200px;
+        height: 200px;
+        margin: 0 auto; /* 가운데 정렬 */
+    }
+
+    .info-section {
+        text-align: center;
+    }
+    
+    .skills-wrapper {
+        justify-content: center; /* 모바일에선 가운데 정렬 */
+    }
+    .tech-stack-container {
+        text-align: center;
+    }
+}
+
+/* [반응형] 화면 줄어들면 컬럼 수 조절 */
+@media (max-width: 1024px) {
+    .guestbook-grid {
+        column-count: 2; /* 태블릿은 2열 */
+    }
+}
+
+@media (max-width: 768px) {
+    .guestbook-grid {
+        column-count: 1; /* 모바일은 1열 */
+    }
 }

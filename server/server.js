@@ -4,6 +4,7 @@ const path = require('path');
 const db = require('./config/db');
 const upload = require('./config/multerConfig'); // 파일 업로드 설정
 const cors = require('cors');
+require('dotenv').config();
 //------------ routes------------------------
 const authRoutes = require('./routes/authRoutes');
 const projectRoutes = require('./routes/projectRoutes');
@@ -14,7 +15,7 @@ const fileController = require('./controllers/fileController');
 // express 애플리케이션을 생성한다
 const app = express();
 // 서버가 사용할 포트 번호를 설정
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(cors());    //cors 모든 요청 허용하기
@@ -37,6 +38,15 @@ app.use('/api/contact', contactRoutes);
 // 주소확인 -> 미들웨어 파일을 저장 multer 설정 객체가 upload -> 파일컨트롤러의 upload 
 app.post('/api/upload', upload.single('file'), fileController.upload);
 
+// 배포할때 리액트 정적 파일 서빙 설정
+// 현재 폴더 안에 있는 dist 폴더를 정적파일들이 있는 곳으로 써라
+app.use(express.static(path.join(__dirname, 'dist')));
+
+// "사용자가 이상한 주소로 들어오거나, 새로고침을 하면 무조건 리액트(index.html)를 줘라"
+// (이게 있어야 리액트 라우터가 페이지 이동을 처리할 수 있음)
+app.get(/(.*)/, (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
 
 app.listen(port, ()=> {
     console.log(`서버가 http://localhost:${port}에서 실행중입니다.`);

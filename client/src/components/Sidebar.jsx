@@ -46,7 +46,10 @@ const Sidebar = ({isOpen, onClose, mode = "home"}) => {
         if(mode === 'home'){
             return activeSection === item.id;
         }else {
-            return location.pathname === item.path;
+            if (location.pathname === item.path) return true;
+            if (location.pathname === '/admin' && item.id === 'profile') return true;
+
+            return false;
         }
     };
 

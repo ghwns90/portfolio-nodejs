@@ -19,7 +19,7 @@ function About(){
             {name: "HTML/CSS", category: "frontend"},
         ],
         devops: [
-            {name: "Docekr", category: "devops"},
+            {name: "Docker", category: "devops"},
             {name: "AWS", category: "devops"},
             {name: "Git", category: "devops"},
         ]
@@ -48,15 +48,15 @@ function About(){
 
     return(
         // id="about"은 나중에 메뉴 눌렀을 때 여기로 스크롤 이동하려고 달아두는 이름표
-        <section id="about" className="section-spacer" style={{ position: 'relative', overflow: 'hidden' }}>
-            {/* 왼쪽 상단 보라색 조명 */}
-            <div className="bg-blob blob-purple" style={{top: '-10%', left: '-10%' }}></div>
-            {/* 오른쪽 하단 핑크색 조명 */}
-            <div className="bg-blob blob-pink" style={{ bottom: '-10%', right: '-10%'}}></div>
+        <section id="about" className="section-spacer">
             <div className="container">
-                <div className="card about-card-layout">
+                <div className="card about-card-layout fade-up-element">
+                    {/* 왼쪽 상단 보라색 조명 */}
+                    <div className="bg-blob blob-purple" style={{top: '-10%', left: '-10%', opacity: 0.4, zIndex: 0}}></div>
+                    {/* 오른쪽 하단 핑크색 조명 */}
+                    <div className="bg-blob blob-pink" style={{ bottom: '-10%', right: '-10%', opacity: 0.4, zIndex: 0}}></div>
                     {/* 이미지 */}
-                    <div className="profile-section fade-up-element delay-2">
+                    <div className="profile-section">
                         <div className="profile-img-wrapper">
                             <img
                                 src={profile.profile_image_url || profileImage}
@@ -68,47 +68,53 @@ function About(){
                 
                     {/* 텍스트 */}
                     <div className="info-section">
-                        <h1 className="about-title fade-up-element delay-2">
-                            <span style={{ fontSize: '1.5rem', marginTop: '10px', display: 'block'}}>
-                                {profile.name}
-                            </span>
+                        <h2 className="profile-name fade-up-element delay-1">
+                            {profile.name}
+                        </h2>
+                        <div className="fade-up-element delay-2">
                             {profile.title.split('\n').map((line, i) => (
-                                <span key={i} style={{ color:'#ccc'}}>
+                                <span key={i} className="profile-title">
                                     {line}
                                     <br/>
                                 </span>
                             ))}
-                        </h1>
-
+                        </div>
+                            
                         <div className="about-desc fade-up-element delay-3">
                             {profile.description.split('\n').map((line, index) => (
-                                <p key={index} style={{marginTop: '8px', color:'#aaa'}}>{line}</p>
+                                <p key={index}>
+                                    {line}
+                                </p>
                             ))}
                         </div>
                         {/* 기술 스택 */}
                         <div className="tech-stack-container fade-up-element delay-4">
-                            <h3 style={{fontSize:'1.1rem', marginBottom:'15px', color:'#ccc'}}>Tech Stack</h3>
-                            <div className="skills-wrapper">
-                                {skills.frontend.map((skill, index) => (
-                                    <span key={index} className={`skill-chip ${skill.category}`}>
-                                        {skill.name}
-                                    </span>
-                                ))}
+                            <h3>Tech Stack</h3>
+                            <div className="skills-group">
+                                <div className="skills-wrapper">
+                                    {skills.frontend.map((skill, index) => (
+                                        <span key={`fe-${index}`} className={`skill-chip ${skill.category}`}>
+                                            {skill.name}
+                                        </span>
+                                    ))}
+                                </div>
+                                <div className="skills-wrapper">    
+                                    {skills.backend.map((skill, index) => (
+                                        <span key={`be-${index}`} className={`skill-chip ${skill.category}`}>
+                                            {skill.name}
+                                        </span>
+                                    ))}
+                                </div>
+                                <div className="skills-wrapper">
+                                    {skills.devops.map((skill, index) => (
+                                        <span key={`de-${index}`} className={`skill-chip ${skill.category}`}>
+                                            {skill.name}
+                                        </span>
+                                    ))}
+                                </div>
                             </div>
-                            <div className="skills-wrapper">    
-                                {skills.backend.map((skill, index) => (
-                                    <span key={index} className={`skill-chip ${skill.category}`}>
-                                        {skill.name}
-                                    </span>
-                                ))}
-                            </div>
-                            <div className="skills-wrapper">
-                                {skills.devops.map((skill, index) => (
-                                    <span key={index} className={`skill-chip ${skill.category}`}>
-                                        {skill.name}
-                                    </span>
-                                ))}
-                            </div>
+                            
+                            
                         </div>
                     </div>
                 </div>

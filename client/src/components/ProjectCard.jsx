@@ -12,46 +12,22 @@ function ProjectCard({ project, className="", style={}, animated = true }) {
 
   const bgImage = project.image_url 
     ? project.image_url 
-    : "https://placehold.co/600x400/1a1a1a/666666/png?text=Project+Image";
+    : "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop";
 
   return (
-    <div className={`card project-card ${animationClass} ${className}`}
+    <div className={`project-card ${animationClass} ${className}`}
       style ={{ 
         '--bg-img': `url(${bgImage})`, 
-        minHeight: '420px',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'flex-end',
         ...style
       }}
     >
       {/* 배경 오버레이 (어둡게 만들기) */}
       <div className="project-bg"></div>
-
+      
       {/* 텍스트 내용 */}
       <div className="project-content">
-        <div className="project-header">
-          <h3 className="project-title">{project.title}</h3>
-
-          <div className="project-links">
-            {project.github_url && (
-              <a href={project.github_url || '#'} target="_blank" rel="noopener noreferrer" className="icon-link"
-                style={{ opacity: project.github_url ? 1 : 0.3, cursor: project.github_url ? 'pointer' : 'not-allowed' }}
-              >
-                <FaGithub />
-              </a>
-            )}
-            {project.demo_url && (
-              <a href={project.demo_url || '#'} target="_blank" rel="noopener noreferrer" className="icon-link"
-                style={{ opacity: project.github_url ? 1 : 0.3, cursor: project.github_url ? 'pointer' : 'not-allowed' }}
-              >
-                <FaExternalLinkAlt />
-              </a>
-            )}
-          </div>
-        </div>
-        <p className="project-desc">{project.description || "현재 프로젝트에 대한 설명을 작성 중입니다.."}</p>
-        
+        <h3 className="project-title">{project.title}</h3>          
+        <p className="project-desc">{project.description || "현재 프로젝트에 대한 설명을 입력해주세요"}</p>
         {/* 기술스택 내용 */}
         <div className="project-tags">
           {tags.map((tag, idx) => (
@@ -60,6 +36,28 @@ function ProjectCard({ project, className="", style={}, animated = true }) {
             </span>
           ))}
         </div>
+        {/* 링크 */}
+        <div className="project-actions">
+          {project.github_url ? (
+            <a href={project.github_url || ''} target="_blank" rel="noreferrer" className="btn-action btn-github">
+              <FaGithub /> Code
+            </a>
+          ) : (
+            <span className="btn-action btn-disabled">
+              <FaGithub /> Code
+            </span>
+          )}
+          {project.demo_url ? (
+            <a href={project.demo_url || ''} target="_blank" rel="noreferrer" className="btn-action btn-demo">
+              <FaExternalLinkAlt /> Live Demo
+            </a>
+          ) : (
+            <span className="btn-action btn-disabled">
+              <FaExternalLinkAlt /> Live Demo
+            </span>
+          )}
+        </div>
+
       </div>
     </div>
   );

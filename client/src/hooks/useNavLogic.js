@@ -28,7 +28,7 @@ export const useNavLogic = () => {
             }
 
             // 새로운 타이머 설정: "0.1초 뒤에도 소식 없으면 끝난 걸로 알게!"
-            scrollEndTimer.current = setTimeout(() => {
+            scrollDebounceTimer.current = setTimeout(() => {
                 // 여기가 실행됐다는 건 스크롤이 진짜 멈췄다는 뜻
                 isNavigating.current = false; 
             }, 100);

@@ -112,96 +112,116 @@ function Guestbook(){
     return (
         <section id="guestbook" className="section-spacer">
             <div className="container">
-                <h2 className="section-title text-left">방명록</h2>
 
-                <div className="form-wrapper">
-                    <form onSubmit={handleSubmit} className="card">
+                <h2 className="section-title text-left fade-up-element">
+                    Guest<span className="text-highlight">book</span>
+                </h2>
+
+                <div className="guestbook-form-wrapper fade-up-element delay-1">
+                    <form onSubmit={handleSubmit} className="guestbook-form-card">
+                        <div style={{marginBottom: '20px', color: '#ccc', textAlign: 'center', fontSize: '1.1rem'}}>
+                            소중한 흔적을 남겨주세요
+                        </div>
                         <div className="form-row">
                             <div className="col-sm">
                                 <input 
                                     type="text" name="username" placeholder="닉네임" 
-                                    className="input-field"
+                                    className="guest-input"
                                     value={formData.username} onChange={handleChange}
                                 />
                             </div>
                             <div className="col-lg">
                                 <input 
                                     type="password" name="password" placeholder="비밀번호" 
-                                    className="input-field"
+                                    className="guest-input"
                                     value={formData.password} onChange={handleChange} 
                                 />
                             </div>
                         </div>
                         <textarea 
                             name="content" placeholder="응원의 한마디를 남겨주세요!" rows="3"
-                            className="textarea-field"
+                            className="guest-input guest-textarea"
                             value={formData.content} onChange={handleChange}
                             style={{ marginBottom:'15px'}} 
                         />
-                        <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>남기기</button>
+                        <button type="submit" className="btn btn-submit">남기기</button>
                     </form>
                 </div>
 
-                <div className="guestbook-grid">
+                <div className="guestbook-grid fade-up-element delay-2">
                     {comments.map((comment) => (
-                        <div key={comment.id} className="card guestbook-card fade-up-element delay-2" >
-                            <div className="flex-row" style={{ justifyContent: 'space-between', marginBottom: '10px' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                    {/* 랜덤 아바타 느낌의 원 */}
-                                    <div style={{
-                                        width: '30px', height: '30px', borderRadius: '50%',
-                                        background: '#cccccc'
-                                    }}></div>
-                                    <strong style={{ color: '#fff', fontSize: '1.05rem' }}>{comment.username}</strong>
-                                </div>        
-                                <small style={{ color: 'var(--text-muted)', fontSize:'0.8rem' }}>
-                                    {new Date(comment.created_at).toLocaleDateString()}
-                                </small>
+                        <div key={comment.id} className="guestbook-card fade-up-element delay-2">
+                            <div className="card-user-section">
+                                <div className="card-header">
+                                    <div className="user-info">
+                                        <div className="avatar-circle">
+                                            {/* 랜덤 이모지나 아이콘 */}
+                                            👾
+                                        </div>
+                                        <div>
+                                            <div className="user-name">{comment.username}</div>
+                                            <small style={{ color: '#666', fontSize:'0.75rem' }}>
+                                                {new Date(comment.created_at).toLocaleDateString()}
+                                            </small>
+                                        </div>
+                                    </div>
+                                    {/* 삭제 버튼 */}
+                                    <button type="button" onClick={() => handleDelete(comment.id)} className="btn-icon-delete" style={{ position: 'relative', top: 'auto', right: 'auto' }}>
+                                        <FaTrash />
+                                    </button>
+                                </div>
+
+                                {/* 본문 */}
+                                <p className="card-message">
+                                    {comment.content}
+                                </p>
                             </div>
 
-                            <p style={{ margin: '15px 0', lineHeight: 1.6, color: '#e0e0e0', wordBreak: 'break-all' }}>
-                                {comment.content}
-                            </p>
-
-                            {/* 답글 리스트 */}
-                            {comment.replies && comment.replies.length > 0 && (
-                                <div className="reply-box">
-                                    {comment.replies.map((reply) => (
-                                        <div key={reply.id} style={{ marginBottom: '5px', fontSize: '0.9rem' }}>
-                                            <strong style={{ color: '#ec4899' }}>Admin:</strong>
-                                            <span style={{ marginLeft: '5px', color: '#ccc' }}>{reply.content}</span>
+                            {/* ⬛ 하단: 관리자/답글 영역 (어두운 배경으로 분리!) */}
+                            {(isAdmin || (comment.replies && comment.replies.length > 0)) && (
+                                <div className="card-admin-section">
+                                    
+                                    {/* 이미 달린 답글 보여주기 */}
+                                    {comment.replies && comment.replies.length > 0 && (
+                                        <div className="admin-reply-box">
+                                            {comment.replies.map((reply) => (
+                                                <div key={reply.id}>
+                                                    <span className="reply-badge">Admin</span>
+                                                    <p className="reply-text">&nbsp;{reply.content}</p>
+                                                </div>
+                                            ))}
                                         </div>
-                                    ))}
-                                </div>
-                            )}
+                                    )}
 
-                            {/* 답글 달기 (관리자용) */}
-                            {isAdmin && (
-                                <form onSubmit={(e) => handleReplySubmit(e, comment.id)} style={{ marginTop: '15px', display: 'flex', gap: '5px'}}>
-                                    <input type="text" name="content" placeholder="답글..." className="input-field" style={{padding: '5px 10px', fontSize:'0.8rem'}} />
-                                    <button type="submit" className="btn btn-outline" style={{padding: '5px 10px', fontSize:'0.8rem'}}>등록</button>
-                                </form>
-                            )}
-                            
-                            {/* 삭제 버튼 */}
-                            <button type="button" onClick={() => handleDelete(comment.id)} className="btn-icon-delete" style={{ position: 'absolute', top: '15px', right: '15px' }}>
-                                <FaTrash />
-                            </button>
+                                    {/* 관리자 답글 입력창 */}
+                                    {isAdmin && (
+                                        <form onSubmit={(e) => handleReplySubmit(e, comment.id)} className="admin-reply-form">
+                                            <input 
+                                                type="text" name="content" placeholder="답글을 입력하세요..." 
+                                                className="admin-input"
+                                            />
+                                            <button type="submit" className="btn-mini">등록</button>
+                                        </form>
+                                    )}
+                                </div>
+                            )}                           
                         </div>
                     ))}
                 </div>
+
                 {/* 페이징 */}
                 {comments.length > 0 && (
-                    <div className="pagination flex-center fade-up-element delay-3" style={{ marginTop: '30px', gap: '15px' }}>
+                    <div className="pagination flex-center fade-up-element delay-3" style={{ marginTop: '40px', gap: '15px' }}>
                         <button
                             className="btn btn-outline"
                             disabled={currentPage === 1}
                             onClick={() => handlePageChange(currentPage - 1)}
+                            style={{ borderRadius: '50%', width: '40px', height: '40px', padding: 0 }}
                         >
                             <FaChevronLeft />
                         </button>
 
-                        <span style={{ fontWeight: 'bold', color: '#fff' }}>
+                        <span style={{ fontWeight: '600', color: '#fff', fontSize: '0.9rem' }}>
                             {currentPage} / {totalPages}
                         </span>
 
@@ -209,6 +229,7 @@ function Guestbook(){
                             className="btn btn-outline"
                             disabled={currentPage === totalPages}
                             onClick={() => handlePageChange(currentPage + 1)}
+                            style={{ borderRadius: '50%', width: '40px', height: '40px', padding: 0 }}
                         >
                             <FaChevronRight />
                         </button>

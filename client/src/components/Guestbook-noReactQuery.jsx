@@ -1,130 +1,9 @@
-import React, { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import React, {useEffect, useState} from "react";
 import {FaTrash,FaChevronLeft, FaChevronRight} from 'react-icons/fa'; 
 import { BASE_URL } from '../constants'
 
 function Guestbook(){
-    // 스켈레톤 컴포넌트
-    const GuestbookSkeleton = () => (
-        <div className="guestbook-grid">
-            {[1, 2, 3, 4].map((n) => (
-            <div key={n} className="skeleton-card">
-                <div className="skeleton-item" style={{ width: '40px', height: '40px', borderRadius: '50%' }}></div> {/* 아바타 */}
-                <div className="skeleton-item" style={{ width: '30%', height: '15px' }}></div> {/* 이름 */}
-                <div className="skeleton-item" style={{ width: '100%', height: '60px', marginTop: '15px' }}></div> {/* 본문 */}
-            </div>
-            ))}
-        </div>
-    );
 
-    const queryClient = useQueryClient();
-    const [currentPage, setCurrentPage] = useState(1);
-    const [formData, setFormData] = useState({ username: '', password: '', content: '' });
-    const isAdmin = !!localStorage.getItem('token');
-
-    //데이터 불러오기 useQuery(캐싱과 자동 로딩 관리);
-    const { data: response, isLoading, isError } = useQuery({
-        //queryKey는 데이터의 '주소'. 페이지 번호가 바뀌면 새로운 데이터를 가져온다
-        queryKey: ['comments', currentPage],
-        queryFn: () => fetch(`${BASE_URL}/api/comments?page=${currentPage}`).then(res => res.json()),
-        // 데이터가 신선하다고 간주할 시간(5분 동안은 다시 안불러옴)
-        staleTime: 5000*60,
-    });
-
-    const comments = response?.data || [];
-    const totalPages = response?.pagination?.totalPages || 1;
-
-    // 방명록 등록
-    const addMutation = useMutation({
-        mutationFn: (newComment) => fetch(`${BASE_URL}/api/comments`, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(newComment),
-        }),
-        onSuccess: ()=> {
-            alert("방명록이 등록되었습니다.");
-            setFormData({ username: '', password: '', content: ''});
-            setCurrentPage(1);
-            // comments 로 시작하는 모든 쿼리를 무효화해서 목록을 새로고침
-            queryClient.invalidateQueries({ queryKey: ['comments']});
-        },
-    });
-
-    // 방명록 삭제
-    const deleteMutation = useMutation({
-        mutationFn: ({id, password}) => fetch(`${BASE_URL}/api/comments/${id}`, {
-            method: "DELETE",
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({password}),
-        }),
-        onSuccess: (res) => {
-            if(res.ok){
-                alert('삭제되었습니다');
-                queryClient.invalidateQueries({ queryKey: ['comments']});
-            }else if(res.status === 403){
-                alert('비밀번호가 틀렸습니다');
-            }
-        },
-    });
-
-    const replyMutation = useMutation({
-        mutationFn: ({ commentId, content }) => {
-            const token = localStorage.getItem('token');
-            return fetch(`${BASE_URL}/api/comments/${commentId}/replies`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify({ content })
-            });
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['comments'] });
-        }
-    });
-
-    const handleChange = (e) => {
-        const {name, value} = e.target;
-        setFormData({...formData, [name]: value});
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if(!formData.username || !formData.password || !formData.content){
-            return alert("항목을 다 채워주세요");
-        };
-        addMutation.mutate(formData); // mutate() 호출하면 서버 전송 시작
-    }
-
-    const handleReplySubmit = (e, commentId) => {
-        e.preventDefault();
-        const content = e.target.content.value;
-
-        if(!content) return alert("내용을 입력해주세요.");
-
-        replyMutation.mutate({commentId, content}, {
-            onSuccess: ()=>{
-                e.target.reset();
-            }
-        });
-    }
-
-    const handleDelete = (id) => {
-        const password = window.prompt("비밀번호");
-        if(password) deleteMutation.mutate({id, password});
-    };
-
-    if (isLoading) {
-        return (
-            <section className="container section-spacer">
-                <h2 className="section-title">Guest<span className="text-highlight">book</span></h2>
-                <GuestbookSkeleton /> {/* ✨ 텍스트 대신 스켈레톤 등장! */}
-            </section>
-        );
-    }
-
-/* -----------------------React Query 안쓴 옛날 방식-------------------------
     const [comments, setComments] = useState([]);
     // 새글 입력을 위한 state
     const initialFormState = { username: '', password: '', content: '' };
@@ -229,7 +108,7 @@ function Guestbook(){
             }
         });
     };
------------------------------------------------------------------*/
+
     return (
         <section id="guestbook" className="section-spacer">
             <div className="container">
@@ -336,7 +215,7 @@ function Guestbook(){
                         <button
                             className="btn btn-outline"
                             disabled={currentPage === 1}
-                            onClick={() => setCurrentPage(currentPage - 1)}
+                            onClick={() => handlePageChange(currentPage - 1)}
                             style={{ borderRadius: '50%', width: '40px', height: '40px', padding: 0 }}
                         >
                             <FaChevronLeft />
@@ -349,7 +228,7 @@ function Guestbook(){
                         <button
                             className="btn btn-outline"
                             disabled={currentPage === totalPages}
-                            onClick={() => setCurrentPage(currentPage + 1)}
+                            onClick={() => handlePageChange(currentPage + 1)}
                             style={{ borderRadius: '50%', width: '40px', height: '40px', padding: 0 }}
                         >
                             <FaChevronRight />

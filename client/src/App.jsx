@@ -10,6 +10,9 @@ import { useScrollAnimation } from './hooks/useScrollAnimation';
 import ProjectManager from './components/admin/ProjectManager';
 import ProfileEditor from './components/admin/ProfileEditor';
 import MessageManager from './components/admin/MessageManager';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from './config/queryClient';
+
 import './App.css'
 
 function App() {
@@ -34,23 +37,23 @@ function App() {
   }
   
   return (
-    
-    <Routes>
-      {/* 일반 사용자용 (MainLayout 적용) */}
-      <Route element={<MainLayout />}>
-        <Route path="/" element={<Home />}/>
-        <Route path="/login" element={<Login />}/>
-      </Route>
-      {/* 관리자용 (Admin 레이아웃 적용) */}
-      <Route path="/admin" element={<RequireAuth><Admin /></RequireAuth>} >
-        <Route index element={<ProfileEditor />} />
-        <Route path="profile" element={<ProfileEditor />} /> {/* /admin/profile */}
-        <Route path="projects" element={<ProjectManager />} /> {/* /admin/projects */}
-        <Route path="messages" element={<MessageManager />} /> {/* /admin/messages */}
-      </Route>
-    </Routes>
-   
-      
+    // 하위 컴포넌트에서 react query 기능 사용 가능
+    <QueryClientProvider client = {queryClient}>
+      <Routes>
+        {/* 일반 사용자용 (MainLayout 적용) */}
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Home />}/>
+          <Route path="/login" element={<Login />}/>
+        </Route>
+        {/* 관리자용 (Admin 레이아웃 적용) */}
+        <Route path="/admin" element={<RequireAuth><Admin /></RequireAuth>} >
+          <Route index element={<ProfileEditor />} />
+          <Route path="profile" element={<ProfileEditor />} /> {/* /admin/profile */}
+          <Route path="projects" element={<ProjectManager />} /> {/* /admin/projects */}
+          <Route path="messages" element={<MessageManager />} /> {/* /admin/messages */}
+        </Route>
+      </Routes>   
+    </QueryClientProvider>  
     
   );
 }

@@ -1,46 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import ProjectCard from './ProjectCard';
 import { BASE_URL } from '../constants'; // 상수 파일
-import { useQuery } from '@tanstack/react-query'
-
-const getProjects = async () => {
-  const res = await fetch(`${BASE_URL}/api/projects`);
-  if(!res.ok){
-    throw new Error('데이터 불러오기 실패');
-  }
-  return res.json();
-}
 
 function ProjectSection(){
-
-  const { data: projects = [], isLoading } = useQuery({
-    queryKey: ['projects'],
-    queryFn: getProjects,
-    select: (data) => {
-      const main = data.find(p => p.featured_type === 'main');
-      const second = data.find(p => p.featured_type === 'second');
-      const others = data.filter(p => p.featured_type !== 'main' && p.featured_type !== 'second');
-
-      const result = [...others];
-
-      if(main) result.splice(0, 0, main);
-      if(second){
-        if(result.length >= 3){
-          result.splice(3, 0, second);
-        }else {
-          result.push(second);
-        }
-      }
-
-      return result;
-      
-    }
-  });
-  
-  if (isLoading) return <div>프로젝트 로딩 중...</div>;
-
-
-  /** ----------------------------옛날 방식--------------------------
     const [projects, setProjects] = useState([]);
 
     // 화면이 켜지면 딱 한 번 실행되는 함수
@@ -68,13 +30,17 @@ function ProjectSection(){
         })
         .catch((err) => console.error('에러 발생 : ', err));
     }, []);
-  ---------------------------------------------------------------*/
+
     return (
         <section id="projects" className="section-spacer">
           <div className="container">
             <h2 className="section-title text-left fade-up-element">
-               Featured<span className="text-highlight-font"> Projects</span>
+               Featured<span className="text-highlight"> Projects</span>
             </h2>
+
+            <p className="text-center fade-up-element delay-1" style={{ color: '#aaa', marginBottom: '40px' }}>
+            
+            </p>
 
             <div className="bento-grid">
               {projects.map((project, index) => {

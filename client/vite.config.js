@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { VitePWA } from 'vite-plugin-pwa'
+//import { VitePWA } from 'vite-plugin-pwa' // PWA 플러그인
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     // PWA 설정!!!
     // 우선 npm install vite-plugin-pwa -D 플러그인 다운로드
-    VitePWA({
+    /*VitePWA({
       registerType: 'autoUpdate', // 업데이트시 자동으로 새버전 적용
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       // 앱 정보
@@ -40,6 +40,6 @@ export default defineConfig({
           }
         ]
       }
-    })
+    }) */
   ],
 })

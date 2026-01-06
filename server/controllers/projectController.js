@@ -24,6 +24,17 @@ const projectController = {
     } catch (err) {
       res.status(500).json({ message: '삭제 실패' });
     }
+  },
+  updateFeatured: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { featured_type } = req.body; //'main' 'second' 'none' 중 하나
+
+      const updated = await projectModel.updateFeatured(id, featured_type);
+      res.json(updated);
+    } catch (error) {
+      res.status(500).json({message: '설정 변경 실패'});
+    }
   }
 };
 

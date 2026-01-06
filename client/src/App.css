@@ -1,6 +1,12 @@
 /* App.css */
-
-
+@import url('https://fonts.googleapis.com/css2?family=Michroma&family=Space+Grotesk:wght@700&family=JetBrains+Mono:wght@500&display=swap');
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+@font-face {
+    font-family: 'GiantsInline';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-1@1.1/Giants-Inline.woff2') format('woff2');
+    font-weight: normal;
+    font-display: swap;
+}
 /* =========================================
     ROOT VARIABLES & RESET (디자인 토큰)
    ========================================= */
@@ -22,6 +28,12 @@
   --text-main: #ffffff;
   --text-muted: #a1a1aa;
 
+  /* 폰트 */
+  --font-logo: 'Michroma', sans-serif;
+  --font-title: 'Space Grotesk', sans-serif; /* 프로젝트 제목용 네온 느낌 */
+  --font-menu: "JetBrains Mono", monospace; /* 코드나 기술 스택용 */
+  --font-body: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+
   /* 레이아웃 크기 */
   --sidebar-width: 250px;
   --border-radius-lg: 30px; /* 이미지처럼 둥글게 */
@@ -37,14 +49,28 @@
 body, html {
   background-color: var(--bg-dark);
   color: var(--text-main);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
   line-height: 1.6;
   overflow-x: hidden; /* 가로 스크롤 방지 */
 }
 
 a { text-decoration: none; color: inherit; }
-ul { list-style: none; }
 
+ul { list-style: none; }
+/* 폰트 */
+.font-accent { font-family: var(--font-accent); }
+.font-bold { font-weight: 800; }
+.text-gradient { /* 폰트에 그라데이션 넣기 */
+  background: linear-gradient(to right, #a855f7, #d946ef);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-highlight-font {
+  font-family: var(--font-title);
+  font-weight: 700;
+}
 /* =========================================
     LAYOUT STRUCTURE (사이드바 레이아웃)
    ========================================= */
@@ -110,9 +136,11 @@ ul { list-style: none; }
 }
 
 .logo-area {
+  font-family: var(--font-logo);
+  letter-spacing: -1px;
   margin-bottom: 40px;
   padding-left: 15px;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: bold;
   color: var(--text-main);
   display: flex;
@@ -123,10 +151,12 @@ ul { list-style: none; }
 .nav-menu {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 3px;
 }
 
 .nav-item {
+  font-family: var(--font-menu);
+  font-size: 0.9rem;
   display: flex;
   align-items: center;
   padding: 14px 20px;
@@ -456,7 +486,8 @@ ul { list-style: none; }
 }
 
 .profile-name {
-  font-size: 2.5rem;
+  font-family: 'GiantsInline';
+  font-size: 1.8rem;
   font-weight: 800;
   margin-bottom: 10px;
   background: linear-gradient(to right, #fff, #e9d5ff);
@@ -466,7 +497,7 @@ ul { list-style: none; }
 }
 
 .profile-title {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: var(--primary-neon);
   font-weight: 600;
   margin-bottom: 25px;
@@ -481,7 +512,7 @@ ul { list-style: none; }
   font-size: 1.05rem;
   line-height: 1.8;
   color: #d4d4d8;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
   font-weight: 300;
 }
 
@@ -491,14 +522,14 @@ ul { list-style: none; }
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: #71717a;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   font-weight: 600;
 }
 
 .skills-wrapper {
     display: flex;
     flex-wrap: wrap; /* 줄바꿈 허용 */
-    gap: 12px; /* 칩 사이 간격 */
+    gap: 10px; /* 칩 사이 간격 */
     margin-bottom: 16px;
 }
 
@@ -1023,6 +1054,9 @@ ul { list-style: none; }
 }
 /* [Guestbook & Contact 전용] */
 .section-title {
+  font-family: var(--font-title);
+  text-transform: uppercase;
+  letter-spacing: 2px;
   font-size: 2rem;
   margin: 2rem;
   font-weight: 700;
@@ -1313,7 +1347,6 @@ ul { list-style: none; }
 .login-icon-area {
     font-size: 3rem;
     color: var(--primary-neon);
-    margin-bottom: 20px;
     /* 아이콘이 살짝 둥둥 떠있는 느낌 */
     animation: floatIcon 3s ease-in-out infinite;
 }
@@ -1322,7 +1355,7 @@ ul { list-style: none; }
     color: #fff;
     font-size: 1.8rem;
     font-weight: 700;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     letter-spacing: 1px;
 }
 
@@ -1380,7 +1413,6 @@ ul { list-style: none; }
 .btn-login {
     width: 100%;
     padding: 15px;
-    margin-top: 10px;
     border-radius: 100px; /* 둥글게 */
     background: linear-gradient(90deg, #a855f7, #d946ef);
     color: white;
@@ -1409,7 +1441,30 @@ ul { list-style: none; }
     50% { transform: translateY(-10px); }
 }
 
+/* 스켈레톤 애니메이션 */
+@keyframes skeleton-gradient {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
 
+.skeleton-item {
+  background: linear-gradient(90deg, #222 25%, #333 50%, #222 75%);
+  background-size: 200% 100%;
+  animation: skeleton-gradient 1.5s infinite;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+/* 방명록 카드 모양 흉내 */
+.skeleton-card {
+  width: 100%;
+  height: 150px; /* 실제 카드 높이랑 비슷하게 */
+  padding: 20px;
+  background: #1a1a1a;
+  margin: 2.5rem 0;
+  border-radius: 20px;
+  border: 1px solid #333;
+}
 
 
 
@@ -1516,10 +1571,6 @@ ul { list-style: none; }
     
     .info-section {
       align-items: center;
-    }
-
-    .skills-wrapper {
-        justify-content: center;
     }
 
     .profile-img-wrapper {

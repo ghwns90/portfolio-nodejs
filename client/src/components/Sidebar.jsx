@@ -9,10 +9,10 @@ const Sidebar = ({isOpen, onClose, mode = "home"}) => {
 
     // Home인지 Admin 인지에 따라서 menu가 다름
     const homeMenu = [
-        {id: 'about', label:'소개', icon: <FaUser/> },
-        {id: 'projects', label:'프로젝트', icon: <FaCode/> },
-        {id: 'guestbook', label:'방명록록', icon: <FaCommentDots/> },
-        {id: 'contact', label:'문의하기', icon: <FaEnvelope/> },
+        {id: 'about', label:'About', icon: <FaUser/> },
+        {id: 'projects', label:'Projects', icon: <FaCode/> },
+        {id: 'guestbook', label:'Guestbook', icon: <FaCommentDots/> },
+        {id: 'contact', label:'Contact', icon: <FaEnvelope/> },
     ];
 
     const adminMenu = [
@@ -84,7 +84,7 @@ const Sidebar = ({isOpen, onClose, mode = "home"}) => {
                     }}
                     style={{ cursor : 'pointer' }}
                     >
-                    {mode === 'admin' ? 'ADMIN' : 'HoJunior'}
+                    {mode === 'admin' ? 'ADMIN' : `HoJun's`}
                 </div>
 
                 <nav className="nav-menu">
@@ -109,7 +109,7 @@ const Sidebar = ({isOpen, onClose, mode = "home"}) => {
                         {mode === 'home' && (
                             <div className="nav-item" onClick={()=> navigate('/admin')} >
                                 <span style={{ marginRight: '10px' }}><FaUserCog /></span>
-                                관리자
+                                admin
                             </div>
                         )}
 
@@ -123,7 +123,7 @@ const Sidebar = ({isOpen, onClose, mode = "home"}) => {
 
                         <div className="nav-item" onClick={handleLogout} style={{ color: '#ff6b6b' }}>
                             <span style={{ marginRight: '10px' }}><FaSignOutAlt /></span>
-                            로그아웃
+                            logout
                         </div>
                     </>
                     ) : (

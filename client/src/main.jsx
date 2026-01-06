@@ -12,3 +12,15 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     </BrowserRouter>
   </React.StrictMode>,
 )
+// 서비스 워커 등록 코드
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=> {
+    navigator.serviceWorker.register('/sw.js')
+      .then((registration) => {
+        console.log('Service Worker 등록 성공 : ', registration.scope);
+      })
+      .catch(err => {
+        console.log('Service Worker 등록 실패 : ', err);
+      });
+  });
+};

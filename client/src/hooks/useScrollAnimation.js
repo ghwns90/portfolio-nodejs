@@ -11,7 +11,8 @@ export const useScrollAnimation = () => {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if(entry.isIntersecting){
-            entry.target.classList.add('visible');            
+            entry.target.classList.add('visible'); 
+            // observer.unobserve(entry.target);           
           }else{
             entry.target.classList.remove('visible');
           };
@@ -21,11 +22,10 @@ export const useScrollAnimation = () => {
 
     const observeNewElements = () => {
       // .fade-up-element 클래스가 있는데, 아직 감시안받는 (.observed 마크가 없는) 애들만 찾음
-      const targets = document.querySelectorAll('.fade-up-element:not(.observed)');
+      const targets = document.querySelectorAll('.fade-up-element');
 
       targets.forEach(target => {
         observer.observe(target);
-        target.classList.add('observed');
       });
     };
 
@@ -40,9 +40,11 @@ export const useScrollAnimation = () => {
 
     // body 전체를 감시(자식 요소 추가 감지)
     mutationObserver.observe(document.body, {childList: true, subtree: true});
-
+    // 페이지 이동 직후에 한 번 더 실행 (리액트 렌더링 타이밍 때문)
+    const timeoutId = setTimeout(observeNewElements, 100);
     //첨소
     return () => {
+      clearTimeout(timeoutId);
       observer.disconnect();
       mutationObserver.disconnect();
     };

@@ -12,5 +12,7 @@ router.post('/', verifyToken, projectController.createProject);
 
 // 삭제(DELETE)도 관리자만
 router.delete('/:id', verifyToken, projectController.deleteProject);
+// 메인프로젝트 설정
+router.patch('/:id/featured', verifyToken, projectController.updateFeatured);
 
 module.exports = router;
